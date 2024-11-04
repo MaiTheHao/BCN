@@ -1,0 +1,49 @@
+#comp-loading{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .loading-container{
+        position: relative;
+        height: 350px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2em;
+        background-color: white;
+
+        border-radius: .5em;
+        box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+
+        svg{
+            font-size: 5em;
+            animation: rotate 1.5s ease-in-out infinite;
+        }
+
+        span{
+            font-size: 1.2em;
+            font-weight: 600;
+            letter-spacing: 0.5em;
+            color: rgb(220, 220, 220);
+            text-transform: capitalize;
+        }
+    }
+
+    @keyframes rotate{
+        0%{
+            transform: rotate(0deg);
+            color: rgb(170, 248, 255);
+        }
+        50%{
+            transform: rotate(180deg);
+            color: rgb(255, 205, 170);
+        }
+        100%{
+            transform: rotate(360deg);
+            color: rgb(170, 248, 255);
+        }
+    }
+}
