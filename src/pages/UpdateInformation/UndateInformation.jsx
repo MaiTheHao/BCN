@@ -50,7 +50,7 @@ const InfoPreview = React.forwardRef(({ name, className, khoa, profilePic }, ref
 function UndateInformation() {
 	const { userData, updateUserData } = useAppContext();
 	const [name, setName] = useState(userData?.name || "");
-	const [className, setClassName] = useState(userData?.class || "");
+	const [className, setClassName] = useState(userData?.className || "");
 	const [khoa, setKhoa] = useState(userData?.khoa || "");
 	const [profilePic, setProfilePic] = useState(userData?.profilePic || null);
 	const [profilePicBase64, setProfilePicBase64] = useState(null);
