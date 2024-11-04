@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Orbitron:wght@400..900&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Orbitron:wght@400..900&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 :root {
 	--main-background-color: rgb(255, 233, 192);
-	--font-family-main: 'Be Vietnam Pro', serif;
+	--font-family-main: "Be Vietnam Pro", serif;
 	--color-white: white;
 	--color-black: black;
 	--color-gray-light: rgb(240, 240, 240);
@@ -22,13 +22,14 @@
 }
 
 body {
-    width: 100vw;
-    min-height: 100vh;
+	width: 100vw;
+	min-height: 100vh;
 
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 
 	background-color: var(--main-background-color);
+	overflow-x: hidden;
 }
 
 #root {
@@ -58,7 +59,6 @@ body {
 			cursor: pointer;
 			align-items: center;
 			transition: all 0.1s ease-out;
-			padding: 0.5em 0;
 			font-size: 0.8em;
 
 			&:not(:last-child) {
@@ -66,11 +66,15 @@ body {
 			}
 
 			* {
+				text-align: center;
+				width: 100%;
+				height: 100%;
 				cursor: pointer;
 				background-color: transparent;
 				color: var(--color-black);
 				transition: all 0.1s ease-out;
 				text-transform: capitalize;
+				padding: 0.5em 0;
 			}
 
 			&:hover {

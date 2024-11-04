@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
+import Cookies from "js-cookie";
+import { db, auth } from "../../FB/db";
+import { doc, getDoc } from "firebase/firestore";
 
 const initAppContext = {
 	isAuth: false,
@@ -9,7 +12,11 @@ const initAppContext = {
 
 const AppContextProvider = ({ children }) => {
 	const [appContext, setAppContext] = useState({ ...initAppContext, screenW: window.innerWidth, screenH: window.innerHeight });
-	const [crrPage, setCrrPage] = useState('trang-chu');
+	const [crrPage, setCrrPage] = useState(Cookies.get('crrPage') || "xuat-anh");
+	const [userData, setUserData] = useState({});
+	console.log(userData);
+	
+
 	const handleSetAuth = (_isAuth, _isLogged, _user) => {
 		setAppContext({
 			...appContext,
@@ -19,10 +26,45 @@ const AppContextProvider = ({ children }) => {
 		});
 	};
 
+	const handleSetCrrPage = (_crrPage) => {
+		setCrrPage(_crrPage);
+		Cookies.set('crrPage', _crrPage);
+	};
+
+	const updateUserData = (newData) => {
+		setUserData((prevData) => ({
+			...prevData,
+			...newData,
+		}));
+	};
+
 	const providerValues = {
 		appContext,
 		handleSetAuth,
-	}
+		crrPage,
+		handleSetCrrPage,
+		userData,
+		updateUserData
+	};
+
+	useEffect(() => {
+		const fetchUserData = async () => {
+			const user = auth.currentUser;
+			if (user) {
+				const UID = user.uid;
+				const docRef = doc(db, "userInformation", UID);
+				const res = await getDoc(docRef);
+				if (res.exists()) {
+					setUserData((prevData) => ({
+						...prevData,
+						...res.data(),
+					}));
+				}
+			}
+		};
+
+		fetchUserData();
+	}, [auth.currentUser]);
 
 	useEffect(() => {
 		const handleResize = () => {

@@ -5,21 +5,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import { logout } from "../../FB/handleLoginAction";
 import useAppContext from "../../contexts/App/useAppContext";
+import pages from "../../pages";
 
 const mountWith = {
 	navWrapper: 770,
-}
+};
 
-const NavMenu = () => (
-	<ul>
-		<li>
-			<Link to={"cap-nhat-thong-tin"}>Cập nhật thông tin</Link>
-		</li>
-		<li>
-			<Link to={"xuat-anh"}>Xuất ảnh</Link>
-		</li>
-	</ul>
-);
+const NavMenu = () => {
+	const { crrPage, handleSetCrrPage } = useAppContext();
+	return (
+		<ul>
+			{pages
+				.filter((page) => page.name)
+				.map((item, index) => (
+					<li key={index}>
+						<Link
+							to={`/${item.path}`}
+							className={crrPage === item.path ? "active" : ""}
+							onClick={() => handleSetCrrPage(item.path)}
+						>
+							{item.name}
+						</Link>
+					</li>
+				))}
+		</ul>
+	);
+};
 
 function Header({ ...rest }) {
 	const { appContext } = useAppContext();
@@ -95,7 +106,7 @@ function Header({ ...rest }) {
 						<div className="wrapper webHeader-right__user-wrapper" ref={userWrapperRef}>
 							<ul>
 								<li>
-									<button onClick={logout}>đăng xuất</button>
+									<button onClick={() => logout()}>đăng xuất</button>
 								</li>
 							</ul>
 						</div>

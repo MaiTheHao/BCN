@@ -2,9 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./auth/Auth";
 import AppContextProvider from "./contexts/App/AppContextProvider";
-import Layout from "./components/Layout/Layout";
-
-const pages = [{ path: "*", component: <Layout>TEST :</Layout> }];
+import pages from "./pages";
 
 function App() {
 	return (
