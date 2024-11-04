@@ -25,7 +25,7 @@ const pages = [
 	{
 		path: "*",
 		component: (
-			<Navigate to="cap-nhat-thong-tin" />
+			<Navigate to="xuat-anh" />
 		),
 	},
 ];
