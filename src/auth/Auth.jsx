@@ -12,7 +12,7 @@ function Auth() {
 	const handleOnAuthStateChange = () => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setIsLoading(true);
-			if (user) {
+			if (user && user?.emailVerified) {
 				handleSetAuth(true, true, user);
 				setIsLoading(false);
 			} else {

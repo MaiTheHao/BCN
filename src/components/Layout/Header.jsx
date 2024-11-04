@@ -13,13 +13,10 @@ const mountWith = {
 const NavMenu = () => (
 	<ul>
 		<li>
-			<Link>Trang chủ</Link>
+			<Link to={"cap-nhat-thong-tin"}>Cập nhật thông tin</Link>
 		</li>
 		<li>
-			<Link>Cập nhật thông tin</Link>
-		</li>
-		<li>
-			<Link>Xuất ảnh</Link>
+			<Link to={"xuat-anh"}>Xuất ảnh</Link>
 		</li>
 	</ul>
 );
