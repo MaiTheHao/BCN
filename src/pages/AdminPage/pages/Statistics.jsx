@@ -11,7 +11,8 @@ const fetchUsers = async () => {
 	return res.docs.map((doc) => ({ UID: doc.id, ...doc.data() }));
 };
 
-const exportAsCSV = (users) => {
+const exportAsCSV = (inputData) => {
+	const users = inputData.map((user) => ({UID: user.UID, name: user.name, khoa: user.khoa, className: user.className}));
 	const headers = Object.keys(users[0]).join(",");
 	const rows = users.map((user) => Object.values(user).join(",")).join("\n");
 	const csv = headers + "\n" + rows;
@@ -42,7 +43,8 @@ function Statistics() {
 	}, []);
 
 	const filteredUsers = users.filter((user) => user[filter]?.toLowerCase().includes(searchTerm.toLowerCase()));
-
+	console.log(filteredUsers);
+	
 	const exportAsImage = async () => {
 		if (statisticsContentRef.current === null) return;
 		const dataUrl = await toPng(statisticsContentRef.current);
