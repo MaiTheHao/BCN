@@ -8,7 +8,7 @@ import useAppContext from "../../contexts/App/useAppContext";
 import pages, { adminPages } from "../../pages";
 
 const mountWith = {
-	navWrapper: 770,
+	navWrapper: 900,
 };
 
 const NavMenu = () => {

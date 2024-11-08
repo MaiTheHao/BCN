@@ -1,9 +1,10 @@
 import React from "react";
 import "./main.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faHandPointer, faList, faPen } from "@fortawesome/free-solid-svg-icons";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import Statistics from "./pages/Statistics";
+import Draggable from "react-draggable";
 
 const sidebarItems = [
 	{
@@ -26,18 +27,23 @@ function Tooltip({ text }) {
 function AdminPage() {
 	return (
 		<div className="admin-page">
-			<div className="sidebar">
-				<div className="sidebar-content">
-					<ul>
-						{sidebarItems.map((item, index) => (
-							<Link key={index} to={item?.href}>
-								<FontAwesomeIcon icon={item.icon} />
-								<Tooltip text={item.title} />
-							</Link>
-						))}
-					</ul>
+			<Draggable axis="y" handle=".sidebar">
+				<div className="sidebar">
+					<div className="sidebar-content">
+						<ul>
+							<li style={{ cursor: "move" }}>
+							<FontAwesomeIcon icon={faHandPointer} />
+							</li>
+							{sidebarItems.map((item, index) => (
+								<Link key={index} to={item?.href}>
+									<FontAwesomeIcon icon={item.icon} />
+									<Tooltip text={item.title} />
+								</Link>
+							))}
+						</ul>
+					</div>
 				</div>
-			</div>
+			</Draggable>
 			<div className="content">
 				<Routes>
 					{sidebarItems.map(({ href, Comp }, index) => (

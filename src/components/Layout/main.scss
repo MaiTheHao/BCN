@@ -288,6 +288,12 @@ $user-icon-active-scale: 0.98;
 	}
 }
 
+@media (max-width: 900px) {
+	.webHeader-right__nav {
+		display: none;
+	}
+}
+
 @media (max-width: 770px) {
 	.webHeader-right__nav {
 		display: none;

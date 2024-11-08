@@ -13,9 +13,9 @@ const fetchUsers = async () => {
 
 const exportAsCSV = (users) => {
 	const headers = Object.keys(users[0]).join(",");
-	const rows = users.map(user => Object.values(user).join(",")).join("\n");
+	const rows = users.map((user) => Object.values(user).join(",")).join("\n");
 	const csv = headers + "\n" + rows;
-	const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+	const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
 	const link = document.createElement("a");
 	const url = URL.createObjectURL(blob);
 	link.setAttribute("href", url);
@@ -52,6 +52,18 @@ function Statistics() {
 		link.click();
 	};
 
+	const toggleShowMode = () => {
+		setShowMode((prevMode) => (prevMode === "text" ? "image" : "text"));
+	};
+
+	const handleExport = (type) => {
+		if (type === "image") {
+			exportAsImage();
+		} else if (type === "csv") {
+			exportAsCSV(filteredUsers);
+		}
+	};
+
 	return (
 		<div className="content-page statistics">
 			<div className="statistics-search">
@@ -75,24 +87,22 @@ function Statistics() {
 			</div>
 			<ul className="statistics-actions">
 				<li>
-					<button data-mode="text" onClick={(e) => setShowMode(e.target.getAttribute("data-mode"))}>
-						Xem Text
+					<button onClick={toggleShowMode}>
+						{showMode === "text" ? "Xem Image" : "Xem Text"}
 					</button>
 				</li>
 				<li>
-					<button data-mode="image" onClick={(e) => setShowMode(e.target.getAttribute("data-mode"))}>
-						Xem Image
-					</button>
-				</li>
-				<li>
-					<button onClick={exportAsImage}>Xuất ảnh</button>
-				</li>
-				<li>
-					<button onClick={() => exportAsCSV(filteredUsers)}>Xuất csv</button>
+					<div className="dropdown">
+						<button className="dropbtn">Xuất File</button>
+						<div className="dropdown-content">
+							<a onClick={() => handleExport("image")}>Xuất ảnh</a>
+							<a onClick={() => handleExport("csv")}>Xuất csv</a>
+						</div>
+					</div>
 				</li>
 			</ul>
 
-			<div className="statistics-content" ref={statisticsContentRef}>
+			<div className={`statistics-content ${showMode	}`} ref={statisticsContentRef}>
 				{showMode === "text" ? (
 					<table>
 						<thead>
