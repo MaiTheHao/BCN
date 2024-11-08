@@ -1,49 +1,48 @@
-#comp-loading{
-    height: 100%;
+#comp-loading {
     display: flex;
+    height: 100%;
     justify-content: center;
     align-items: center;
 
-    .loading-container{
-        position: relative;
-        height: 350px;
-        width: 300px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 2em;
+    .loading-container {
         background-color: white;
-
         border-radius: .5em;
         box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
+        height: 350px;
+        justify-content: center;
+        position: relative;
+        width: 300px;
+        align-items: center;
 
-        svg{
-            font-size: 5em;
+        svg {
             animation: rotate 1.5s ease-in-out infinite;
+            font-size: 5em;
         }
 
-        span{
+        span {
+            color: rgb(220, 220, 220);
             font-size: 1.2em;
             font-weight: 600;
             letter-spacing: 0.5em;
-            color: rgb(220, 220, 220);
             text-transform: capitalize;
         }
     }
 
-    @keyframes rotate{
-        0%{
+    @keyframes rotate {
+        0% {
+            color: rgb(170, 248, 255);
             transform: rotate(0deg);
-            color: rgb(170, 248, 255);
         }
-        50%{
-            transform: rotate(180deg);
+        50% {
             color: rgb(255, 205, 170);
+            transform: rotate(180deg);
         }
-        100%{
-            transform: rotate(360deg);
+        100% {
             color: rgb(170, 248, 255);
+            transform: rotate(360deg);
         }
     }
 }

@@ -10,83 +10,85 @@ $user-icon-hover-scale: 1.05;
 $user-icon-active-scale: 0.98;
 
 .webPart {
+	padding: 1em;
 	position: relative;
 	width: 100%;
-	padding: 1em;
 }
 
 .webHeader {
+	align-items: center;
+	background-color: white;
+	border-bottom: 0.1em solid black;
+	display: flex;
+	justify-content: space-between;
+
 	* {
 		user-select: none;
 	}
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	background-color: white;
-	border-bottom: 0.1em solid black;
 
 	&-left {
-		display: flex;
-		justify-content: flex-start;
 		align-items: center;
+		display: flex;
 		gap: 1em;
+		justify-content: flex-start;
 
 		&__icon {
-			display: flex;
-			justify-content: center;
 			align-items: center;
 			border-radius: 50%;
+			display: flex;
+			height: $icon-size;
+			justify-content: center;
 			overflow: hidden;
 			width: $icon-size;
-			height: $icon-size;
 
 			img {
-				width: 100%;
 				height: 100%;
 				object-fit: cover;
+				width: 100%;
 			}
 		}
 
 		&__title {
+			color: $main-bg-color;
 			font-size: 1.2em;
 			font-weight: 700;
 			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			color: $main-bg-color;
 			text-shadow: 0.1em 0.1em 0em gray;
+			text-transform: uppercase;
 		}
 	}
 
 	&-right {
-		position: relative;
-		display: flex;
 		align-items: center;
-		justify-content: flex-end;
+		display: flex;
 		gap: 1em;
+		justify-content: flex-end;
+		position: relative;
 
 		&__nav {
-			display: flex;
 			align-items: center;
 			border-right: 0.1em solid black;
+			display: flex;
 			padding: 0 1em;
+
 			ul {
 				display: flex;
 				gap: 1em;
 
 				li {
-					height: max-content;
-					cursor: pointer;
 					background-color: transparent;
+					cursor: pointer;
+					height: max-content;
 					transition: $transition-ease-out;
 
 					a {
-						color: black;
 						background-color: transparent;
-						transition: $transition-ease-out;
-						padding: .25em .5em;
 						border-radius: 0.25em;
+						color: black;
+						padding: 0.25em 0.5em;
+						transition: $transition-ease-out;
 
-						&.active{
+						&.active {
 							background-color: $hover-bg-color;
 							color: white;
 						}
@@ -110,17 +112,19 @@ $user-icon-active-scale: 0.98;
 
 		&__nav--wrapper {
 			.webHeader-right__nav-icon {
-				display: flex;
-				justify-content: center;
 				align-items: center;
-				width: $icon-size;
+				cursor: pointer;
+				display: flex;
 				height: $icon-size;
+				justify-content: center;
+				transition: $transition-ease-in-out;
+				width: $icon-size;
 
 				svg {
-					font-size: 1.5em;
-					color: rgb(84, 84, 84);
 					animation: nav--wrapperOpen 0.7s ease-in-out;
+					color: rgb(84, 84, 84);
 					cursor: pointer;
+					font-size: 1.5em;
 					transition: $transition-ease-in-out;
 
 					&:hover {
@@ -144,11 +148,11 @@ $user-icon-active-scale: 0.98;
 				}
 			}
 
-			.wrapper{
-				ul{
-					li{
-						a{
-							&.active{
+			.wrapper {
+				ul {
+					li {
+						a {
+							&.active {
 								background-color: $hover-bg-color;
 								color: white;
 							}
@@ -159,33 +163,34 @@ $user-icon-active-scale: 0.98;
 		}
 
 		&__user {
+			align-items: center;
+			display: flex;
+			height: $icon-size;
+			justify-content: center;
 			position: relative;
 			width: $icon-size;
-			height: $icon-size;
-			display: flex;
-			justify-content: center;
-			align-items: center;
 
 			&-icon {
-				display: flex;
-				justify-content: center;
 				align-items: center;
-				width: 100%;
-				height: 100%;
-				border-radius: 50%;
 				background-color: $user-icon-bg-color;
 				border: 0.3em solid $user-icon-border-color;
+				border-radius: 50%;
 				cursor: pointer;
+				display: flex;
+				height: 100%;
+				justify-content: center;
 				transition: $transition-ease-in-out;
+				width: 100%;
 
 				svg {
-					font-size: 1.2em;
 					color: white;
+					font-size: 1.2em;
 					transition: $transition-ease-in-out;
 				}
 
 				&:hover {
 					transform: scale($user-icon-hover-scale);
+
 					svg {
 						color: white;
 					}
@@ -203,68 +208,80 @@ $user-icon-active-scale: 0.98;
 	}
 }
 
-.webBody{
-	min-height: 90vh;
+.webBody {
 	background-color: white;
+	min-height: 90vh;
+
+	&.adminLayout{
+		padding: 0;
+	}
 }
 
 .webFooter {
-	display: flex;
-	justify-content: space-between;
 	align-items: center;
-	padding: 1em;
-	gap: 2em;
 	background-color: black;
 	color: white;
+	display: flex;
+	gap: 2em;
+	justify-content: space-between;
+	padding: 1em;
 
 	&__description {
-		max-width: 50%;
-		font-size: clamp(0.8em, 1.4vw, 1em);
 		display: flex;
 		flex-direction: column;
+		font-size: clamp(0.8em, 1.4vw, 1em);
 		gap: 0.5em;
-		*{
+		max-width: 50%;
+
+		* {
 			text-align: justify;
 		}
 	}
 
 	&__contact {
-		display: flex;
 		align-items: flex-start;
+		display: flex;
 		gap: 1em;
 
 		&-element {
+			align-items: center;
+			border-radius: 0.2em;
 			cursor: pointer;
 			display: flex;
-			align-items: center;
 			gap: 0.25em;
 			padding: 0.25em 0.5em;
-			border-radius: 0.2em;
 			transition: $transition-ease-out;
 
-			a{
+			a {
 				color: white;
 			}
 
-			&.facebook{
+			&.facebook {
 				&:hover {
 					background-color: rgb(59, 89, 152);
 				}
 			}
 
-			&.gmail{
+			&.gmail {
 				&:hover {
 					background-color: rgb(219, 50, 54);
 				}
 			}
 
-			&.instagram{
+			&.instagram {
 				&:hover {
-					background: radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%), radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%), radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%), radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%), radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%), radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%), radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent), linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);;
+					background: radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%),
+						radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%),
+						radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%),
+						radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%),
+						radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%),
+						radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%),
+						radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent),
+						linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);
 				}
 			}
 
-			&:active{
+			&:active {
 				transform: scale(0.95);
 			}
 		}
@@ -282,15 +299,16 @@ $user-icon-active-scale: 0.98;
 		}
 	}
 
-	.webFooter{
-		flex-direction: column;
+	.webFooter {
 		align-items: center;
-		justify-content: flex-start;
+		flex-direction: column;
 		gap: 1em;
+		justify-content: flex-start;
 
 		&__description {
 			max-width: 100%;
-			*{
+
+			* {
 				text-align: center;
 			}
 		}
@@ -304,7 +322,7 @@ $user-icon-active-scale: 0.98;
 }
 
 @media (max-width: 450px) {
-	#root{
+	#root {
 		padding: 0 !important;
 	}
 
@@ -314,7 +332,7 @@ $user-icon-active-scale: 0.98;
 }
 
 @media (max-width: 360px) {
-	.webPart{
-		font-size: .8em;
+	.webPart {
+		font-size: 0.8em;
 	}
 }

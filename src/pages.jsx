@@ -2,6 +2,8 @@ import UpdateInformation from "./pages/UpdateInformation/UndateInformation";
 import ExportPic from "./pages/ExportPic/ExportPic";
 import Layout from "./components/Layout/Layout";
 import { Navigate } from "react-router-dom";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import LayoutAdmin from "./components/Layout/LayoutAdmin";
 
 const pages = [
 	{
@@ -24,10 +26,21 @@ const pages = [
 	},
 	{
 		path: "*",
-		component: (
-			<Navigate to="cap-nhat-thong-tin" />
-		),
+		component: <Navigate to="xuat-anh" />,
 	},
 ];
 
+const adminPages = [
+	{
+		path: "manage/*",
+		name: "Manage",
+		component: (
+			<LayoutAdmin>
+				<AdminPage />
+			</LayoutAdmin>
+		),
+	},
+]
+
+export { adminPages };
 export default pages;

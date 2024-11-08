@@ -5,14 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import { logout } from "../../FB/handleLoginAction";
 import useAppContext from "../../contexts/App/useAppContext";
-import pages from "../../pages";
+import pages, { adminPages } from "../../pages";
 
 const mountWith = {
 	navWrapper: 770,
 };
 
 const NavMenu = () => {
-	const { crrPage, handleSetCrrPage } = useAppContext();
+	const { crrPage, handleSetCrrPage, userRole } = useAppContext();
 	return (
 		<ul>
 			{pages
@@ -23,6 +23,19 @@ const NavMenu = () => {
 							to={`/${item.path}`}
 							className={crrPage === item.path ? "active" : ""}
 							onClick={() => handleSetCrrPage(item.path)}
+						>
+							{item.name}
+						</Link>
+					</li>
+				))}
+
+			{userRole === "admin" &&
+				adminPages.map((item, index) => (
+					<li key={index}>
+						<Link
+							to={`/${item.path}`}
+							className={crrPage === item.path ? "active" : ""}
+							onClick={() => handleSetCrrPage(item.path, true)}
 						>
 							{item.name}
 						</Link>

@@ -1,30 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import * as htmlToImage from "html-to-image";
 import useAppContext from "../../contexts/App/useAppContext";
 import Swal from "sweetalert2";
 import "./main.scss";
-
-const InfoPreview = React.forwardRef(({ name, className, khoa, profilePic }, ref) => (
-	<div className="info-preview small-preview" ref={ref}>
-		<div className="info-preview-top">
-			<p>BỘ CÔNG THƯƠNG</p>
-			<h2>TRƯỜNG ĐẠI HỌC CÔNG NGHIỆP TP. HỒ CHÍ MINH</h2>
-			<h1>SINH VIÊN</h1>
-		</div>
-		<div className="info-preview-body">
-			<div className="info-preview-body__profilePic">{profilePic && <img src={profilePic} alt="Profile" />}</div>
-			<div className="info-preview-body__details">
-				<p className="name">{name}</p>
-				<p className="class">
-					Lớp: <strong>{className}</strong>
-				</p>
-				<p className="chuyennganh">
-					Chuyên ngành: <strong>{khoa}</strong>
-				</p>
-			</div>
-		</div>
-	</div>
-));
+import ProfilePreview from "../../components/ProfilePreview/ProfilePreview";
 
 function ExportPic() {
 	const {userData} = useAppContext();
@@ -69,7 +48,7 @@ function ExportPic() {
 	return (
 		<div className="export-pic">
 			<h1>Thông tin của bạn</h1>
-			<InfoPreview ref={formRef} name={name} className={className} khoa={khoa} profilePic={profilePic} />
+			<ProfilePreview ref={formRef} name={name} className={className} khoa={khoa} profilePic={profilePic} draggable={false}/>
 			<button onClick={handleDownload}>Tải ảnh về máy</button>
 		</div>
 	);

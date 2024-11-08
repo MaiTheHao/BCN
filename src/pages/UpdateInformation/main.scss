@@ -1,11 +1,20 @@
+$primary-color: #007bff;
+$primary-color-hover: #0056b3;
+$border-color: #ccc;
+$border-radius: 0.25em;
+$padding: 0.5em;
+$margin-bottom: 1.25em;
+$gap: 0.5em;
+
 .update-information {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 1.25em;
+	padding: $margin-bottom;
 
 	h1 {
-		margin-bottom: 1.25em;
+		margin-bottom: $margin-bottom;
+		text-transform: capitalize;
 	}
 
 	.info-form {
@@ -13,7 +22,7 @@
 		flex-direction: column;
 		width: 100%;
 		max-width: 31.25em;
-		margin-bottom: 1.25em;
+		margin-bottom: $margin-bottom;
 
 		div {
 			margin-bottom: 0.625em;
@@ -23,11 +32,12 @@
 				flex-direction: column;
 				font-weight: bold;
 				margin-bottom: 0.3125em;
+				gap: 0.25em;
 
 				input[type="text"] {
-					padding: 0.5em;
-					border: 0.0625em solid #ccc;
-					border-radius: 0.25em;
+					padding: $padding;
+					border: 0.0625em solid $border-color;
+					border-radius: $border-radius;
 				}
 
 				input[type="file"] {
@@ -36,138 +46,49 @@
 
 				.custom-file-upload {
 					display: inline-block;
-					padding: 0.5em 0.75em;
+					padding: $padding 0.75em;
 					cursor: pointer;
-					border: 0.0625em solid #ccc;
-					border-radius: 0.25em;
-					background-color: #f0f0f0;
+					border: 0.0625em solid $border-color;
+					border-radius: $border-radius;
+					background-color: $primary-color;
+					color: white;
 					text-align: center;
 				}
 			}
 		}
 	}
 
-	.info-preview {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: flex-start;
-		overflow: hidden;
-		border: 0.01em solid #ccc;
-		font-size: min(1.2vw, 17.28px);
-		background-color: rgb(248, 248, 248);
-
-		border-radius: 0.25em;
-		padding: 1.25em 4em;
-		margin-bottom: 1.25em;
-		&-top {
-			p {
-				font-size: 0.8em;
-				font-weight: 200;
-			}
-
-			h2 {
-				font-size: 0.9em;
-			}
-
-			h1 {
-				font-size: 1.2em;
-				margin-top: 0.5em;
-			}
-			* {
-				text-align: center;
-				text-wrap: nowrap;
-			}
-		}
-
-		&-body {
-			display: flex;
-			justify-content: space-between;
-			width: 100%;
-			height: 100%;
-
-			&__profilePic {
-				position: relative;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 19.378%;
-				height: min(calc(55.5vw / 100px * 23.913px), 191.11px);
-				overflow: hidden;
-				border: 0.2em solid black;
-
-				img {
-					width: 100%;
-					height: 100%;
-					object-fit: cover;
-				}
-			}
-
-			&__details {
-				display: flex;
-				flex-direction: column;
-				justify-content: flex-start;
-				align-items: center;
-
-				.name {
-					font-size: 1.5em;
-					color: rgb(255, 157, 0);
-					text-shadow: 0.1em 0.1em rgb(225, 225, 225);
-					font-weight: 500;
-					text-transform: uppercase;
-				}
-
-				.class {
-					text-transform: uppercase;
-				}
-
-				.chuyennganh {
-					text-transform: capitalize;
-				}
-			}
-		}
-	}
 	.info-form__buttons {
-		margin-top: 0.5em;
 		display: flex;
-		gap: 0.5em;
+		justify-content: space-between;
+		width: 100%;
+		max-width: 31.25em;
+		margin-top: 0.5em;
+		gap: $gap;
+
 		button {
-			width: 10em;
+			width: 45%;
 			padding: 0.625em 1.25em;
-			background-color: #007bff;
+			background-color: $primary-color;
 			color: #fff;
 			border: none;
-			border-radius: 0.25em;
+			border-radius: $border-radius;
 			cursor: pointer;
+			text-wrap: nowrap;
 
 			&:hover {
-				background-color: #0056b3;
+				background-color: $primary-color-hover;
 			}
 		}
 	}
-}
-
-.small-preview {
-	width: 55.5vw;
-	max-width: 799.2px;
-	height: 25.57vw;
-	max-height: 368.208px;
 }
 
 @media (max-width: 900px) {
-	.info-preview {
-		font-size: 1.74vw !important;
-	}
-	.small-preview {
-		width: 80vw;
-		height: 38.26vw;
-	}
-
 	.info-form__buttons {
 		font-size: 0.9em;
 	}
 
-	.info-preview-body__profilePic{
+	.info-preview-body__profilePic {
 		height: calc(80vw / 100px * 23.913px) !important;
 	}
 }

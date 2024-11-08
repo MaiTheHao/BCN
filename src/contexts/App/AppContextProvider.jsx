@@ -3,6 +3,7 @@ import { AppContext } from "./AppContext";
 import Cookies from "js-cookie";
 import { db, auth } from "../../FB/db";
 import { doc, getDoc } from "firebase/firestore";
+import { getIdTokenResult } from "firebase/auth";
 
 const initAppContext = {
 	isAuth: false,
@@ -12,10 +13,9 @@ const initAppContext = {
 
 const AppContextProvider = ({ children }) => {
 	const [appContext, setAppContext] = useState({ ...initAppContext, screenW: window.innerWidth, screenH: window.innerHeight });
-	const [crrPage, setCrrPage] = useState(Cookies.get('crrPage') || "xuat-anh");
+	const [crrPage, setCrrPage] = useState(Cookies.get("crrPage") || "xuat-anh");
 	const [userData, setUserData] = useState({});
-	console.log(userData);
-	
+	const [userRole, setUserRole] = useState("");
 
 	const handleSetAuth = (_isAuth, _isLogged, _user) => {
 		setAppContext({
@@ -26,9 +26,11 @@ const AppContextProvider = ({ children }) => {
 		});
 	};
 
-	const handleSetCrrPage = (_crrPage) => {
+	const handleSetCrrPage = (_crrPage, preventCookie = false) => {
 		setCrrPage(_crrPage);
-		Cookies.set('crrPage', _crrPage);
+
+		if (preventCookie) return;
+		Cookies.set("crrPage", _crrPage);
 	};
 
 	const updateUserData = (newData) => {
@@ -44,7 +46,8 @@ const AppContextProvider = ({ children }) => {
 		crrPage,
 		handleSetCrrPage,
 		userData,
-		updateUserData
+		userRole,
+		updateUserData,
 	};
 
 	useEffect(() => {
@@ -60,6 +63,10 @@ const AppContextProvider = ({ children }) => {
 						...res.data(),
 					}));
 				}
+
+				const idTokenResult = await getIdTokenResult(auth.currentUser);
+				const userClaims = idTokenResult.claims;
+				setUserRole(userClaims.role);
 			}
 		};
 
