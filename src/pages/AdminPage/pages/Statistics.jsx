@@ -12,7 +12,12 @@ const fetchUsers = async () => {
 };
 
 const exportAsCSV = (inputData) => {
-	const users = inputData.map((user) => ({ UID: user.UID, name: user.name, khoa: user.khoa, className: user.className }));
+	const users = inputData.map((user) => ({
+		UID: user.UID,
+		Ho_va_Ten: user.name,
+		Khoa: user.khoa,
+		Lop_danh_nghia: user.className,
+	}));
 	const headers = Object.keys(users[0]).join(",");
 	const rows = users.map((user) => Object.values(user).join(",")).join("\n");
 	const csv = headers + "\n" + rows;
@@ -48,7 +53,6 @@ function Statistics() {
 	}, [users]);
 
 	const filteredUsers = users.filter((user) => user[filter]?.toLowerCase().includes(searchTerm.toLowerCase()));
-	console.log(filteredUsers);
 
 	const handleExportTableAsImage = async () => {
 		if (statisticsContentRef.current === null) return;
@@ -106,6 +110,7 @@ function Statistics() {
 						<option value="name">Tên</option>
 						<option value="khoa">Khoa</option>
 						<option value="className">Lớp</option>
+						<option value="UID">UID</option>
 					</select>
 				</div>
 			</div>

@@ -83,7 +83,7 @@ function UndateInformation() {
 		try {
 			const res = await htmlToImage.toPng(formRef.current);
 			const link = document.createElement("a");
-			link.download = "infoForm.png";
+			link.download = `${userData.name}-${userData.khoa}-${userData.className}.png`;
 			link.href = res;
 			link.click();
 			URL.revokeObjectURL(link.href);
