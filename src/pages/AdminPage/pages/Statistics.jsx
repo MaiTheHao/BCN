@@ -12,7 +12,7 @@ const fetchUsers = async () => {
 };
 
 const exportAsCSV = (inputData) => {
-	const users = inputData.map((user) => ({UID: user.UID, name: user.name, khoa: user.khoa, className: user.className}));
+	const users = inputData.map((user) => ({ UID: user.UID, name: user.name, khoa: user.khoa, className: user.className }));
 	const headers = Object.keys(users[0]).join(",");
 	const rows = users.map((user) => Object.values(user).join(",")).join("\n");
 	const csv = headers + "\n" + rows;
@@ -33,6 +33,7 @@ function Statistics() {
 	const [users, setUsers] = useState([]);
 	const [showMode, setShowMode] = useState("text");
 	const statisticsContentRef = useRef(null);
+	const profileRefs = useRef([]);
 
 	useEffect(() => {
 		const loadUsers = async () => {
@@ -42,16 +43,37 @@ function Statistics() {
 		loadUsers();
 	}, []);
 
+	useEffect(() => {
+		return () => (profileRefs.current = []);
+	}, [users]);
+
 	const filteredUsers = users.filter((user) => user[filter]?.toLowerCase().includes(searchTerm.toLowerCase()));
 	console.log(filteredUsers);
-	
-	const exportAsImage = async () => {
+
+	const handleExportTableAsImage = async () => {
 		if (statisticsContentRef.current === null) return;
 		const dataUrl = await toPng(statisticsContentRef.current);
 		const link = document.createElement("a");
 		link.download = "statistics.png";
 		link.href = dataUrl;
 		link.click();
+		URL.revokeObjectURL(dataUrl);
+	};
+
+	const handleExportPerProfileAsImage = async (user, index) => {
+		const profileRef = profileRefs.current[index];
+		if (profileRef === undefined) return;
+		const dataUrl = await toPng(profileRef);
+		const link = document.createElement("a");
+		link.download = `${user.UID}-${user.name}-${user.khoa}-${user.className}.png`;
+		link.href = dataUrl;
+		link.click();
+		URL.revokeObjectURL(dataUrl);
+	};
+
+	const handleExportAllProfilesAsImages = async () => {
+		const promises = filteredUsers.map((user, index) => handleExportPerProfileAsImage(user, index));
+		await Promise.all(promises);
 	};
 
 	const toggleShowMode = () => {
@@ -60,7 +82,7 @@ function Statistics() {
 
 	const handleExport = (type) => {
 		if (type === "image") {
-			exportAsImage();
+			showMode === "text" ? handleExportTableAsImage() : handleExportAllProfilesAsImages();
 		} else if (type === "csv") {
 			exportAsCSV(filteredUsers);
 		}
@@ -89,9 +111,7 @@ function Statistics() {
 			</div>
 			<ul className="statistics-actions">
 				<li>
-					<button onClick={toggleShowMode}>
-						{showMode === "text" ? "Xem Image" : "Xem Text"}
-					</button>
+					<button onClick={toggleShowMode}>{showMode === "text" ? "Xem Image" : "Xem Text"}</button>
 				</li>
 				<li>
 					<div className="dropdown">
@@ -104,7 +124,7 @@ function Statistics() {
 				</li>
 			</ul>
 
-			<div className={`statistics-content ${showMode	}`} ref={statisticsContentRef}>
+			<div className={`statistics-content ${showMode}`} ref={statisticsContentRef}>
 				{showMode === "text" ? (
 					<table>
 						<thead>
@@ -127,7 +147,7 @@ function Statistics() {
 						</tbody>
 					</table>
 				) : (
-					filteredUsers.map((user) => (
+					filteredUsers.map((user, index) => (
 						<ProfilePreview
 							key={user.UID}
 							name={user.name}
@@ -135,6 +155,7 @@ function Statistics() {
 							khoa={user.khoa}
 							profilePic={user.profilePic}
 							draggable={false}
+							ref={(el) => (profileRefs.current[index] = el)}
 						/>
 					))
 				)}
