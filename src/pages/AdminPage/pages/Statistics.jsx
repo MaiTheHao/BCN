@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { db } from "../../../FB/db";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,7 +32,7 @@ const exportAsCSV = (inputData) => {
 	URL.revokeObjectURL(url);
 };
 
-function Statistics() {
+const Statistics = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filter, setFilter] = useState("name");
 	const [users, setUsers] = useState([]);
@@ -52,32 +52,34 @@ function Statistics() {
 		return () => (profileRefs.current = []);
 	}, [users]);
 
-	const filteredUsers = users.filter((user) => user[filter]?.toLowerCase().includes(searchTerm.toLowerCase()));
+	const filteredUsers = useMemo(() => {
+		return users.filter((user) => user[filter]?.toLowerCase().includes(searchTerm.toLowerCase()));
+	}, [users, filter, searchTerm]);
 
 	const handleExportTableAsImage = async () => {
 		if (statisticsContentRef.current === null) return;
 		const dataUrl = await toPng(statisticsContentRef.current);
-		const link = document.createElement("a");
-		link.download = "statistics.png";
-		link.href = dataUrl;
-		link.click();
-		URL.revokeObjectURL(dataUrl);
+		downloadImage(dataUrl, "statistics.png");
 	};
 
 	const handleExportPerProfileAsImage = async (user, index) => {
 		const profileRef = profileRefs.current[index];
 		if (profileRef === undefined) return;
 		const dataUrl = await toPng(profileRef);
-		const link = document.createElement("a");
-		link.download = `${user.UID}-${user.name}-${user.khoa}-${user.className}.png`;
-		link.href = dataUrl;
-		link.click();
-		URL.revokeObjectURL(dataUrl);
+		downloadImage(dataUrl, `${user.UID}-${user.name}-${user.khoa}-${user.className}.png`);
 	};
 
 	const handleExportAllProfilesAsImages = async () => {
 		const promises = filteredUsers.map((user, index) => handleExportPerProfileAsImage(user, index));
 		await Promise.all(promises);
+	};
+
+	const downloadImage = (dataUrl, filename) => {
+		const link = document.createElement("a");
+		link.download = filename;
+		link.href = dataUrl;
+		link.click();
+		URL.revokeObjectURL(dataUrl);
 	};
 
 	const toggleShowMode = () => {
@@ -108,7 +110,7 @@ function Statistics() {
 					<span>Mục tìm kiếm</span>
 					<select value={filter} onChange={(e) => setFilter(e.target.value)}>
 						<option value="name">Tên</option>
-						<option value="khoa">Khoa</option>
+						<option value="khoa">Chuyên ngành</option>
 						<option value="className">Lớp</option>
 						<option value="UID">UID</option>
 					</select>
@@ -136,7 +138,7 @@ function Statistics() {
 							<tr>
 								<th>UID</th>
 								<th>Họ và Tên</th>
-								<th>Khoa</th>
+								<th>Chuyên ngành</th>
 								<th>Lớp danh nghĩa</th>
 							</tr>
 						</thead>
@@ -159,7 +161,6 @@ function Statistics() {
 							className={user.className}
 							khoa={user.khoa}
 							profilePic={user.profilePic}
-							draggable={false}
 							ref={(el) => (profileRefs.current[index] = el)}
 						/>
 					))
@@ -167,6 +168,6 @@ function Statistics() {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Statistics;

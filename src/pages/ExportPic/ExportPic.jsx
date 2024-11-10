@@ -48,7 +48,7 @@ function ExportPic() {
 	return (
 		<div className="export-pic">
 			<h1>Thông tin của bạn</h1>
-			<ProfilePreview ref={formRef} name={name} className={className} khoa={khoa} profilePic={profilePic} draggable={false}/>
+			<ProfilePreview ref={formRef} name={name} className={className} khoa={khoa} profilePic={profilePic}/>
 			<button onClick={handleDownload}>Tải ảnh về máy</button>
 		</div>
 	);
