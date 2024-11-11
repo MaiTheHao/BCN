@@ -55,7 +55,7 @@ function reducer(state, action) {
 }
 
 function UndateInformation() {
-	const { userData, updateUserData } = useAppContext();
+	const { appContext, userData, updateUserData } = useAppContext();
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [cropVisible, setCropVisible] = useState(false);
 	const formRef = useRef(null);
@@ -140,7 +140,7 @@ function UndateInformation() {
 		<>
 			<CropImage
 				src={state?.profilePic}
-				fixedWidth={250}
+				fixedWidth={Math.min(Math.max(170, appContext?.screenW * (5/28)), 250)}
 				setStorage={handleCropPicture}
 				visible={cropVisible}
 				setVisible={setCropVisible}

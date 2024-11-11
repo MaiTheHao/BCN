@@ -68,7 +68,7 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 					<h1>
 						chỉnh sửa ảnh <FontAwesomeIcon icon={faCropSimple} />
 					</h1>
-					<p>Hãy đưa con trỏ chuột vào kéo để chọn vùng cần cắt. Kéo các góc để thay đổi tỉ lệ.</p>
+					<p>Hãy kéo để chọn vùng cần cắt. Kéo các góc để thay đổi tỉ lệ.</p>
 					<ReactCrop
 						className="comp-cropImage__block__crop"
 						aspect={11 / 16}

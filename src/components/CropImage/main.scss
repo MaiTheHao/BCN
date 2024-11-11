@@ -31,6 +31,7 @@ $border-color: gray;
 		padding: 1em 2em;
         padding-bottom: 20vh;
 		min-height: max-content;
+        overflow: hidden;
 
 		h1 {
 			font-size: 1.5em;
@@ -43,6 +44,7 @@ $border-color: gray;
 			font-size: 1em;
 			font-weight: 400;
 			letter-spacing: 0.1em;
+            text-align: center;
 		}
 
 		button {
@@ -60,7 +62,10 @@ $border-color: gray;
 		}
 
 		&__crop {
-
+            img{
+                width: 70vw;
+                max-width: 400px !important;
+            }
 		}
 
 		&__result {
@@ -85,9 +90,40 @@ $border-color: gray;
 		}
 
 		&__btns{
+            width: 50%;
 			display: flex;
 			justify-content: space-between;
 			gap: 1em;
+
+            button {
+                width: 50%;
+            }
+		}
+	}
+}
+
+@media (max-width: 900px) {
+	.comp-cropImage__block {
+		padding: 1em;
+
+		h1 {
+			font-size: 1.2em;
+		}
+
+		p {
+			font-size: 0.9em;
+		}
+
+		button {
+			width: 100vw;
+			padding: 0.5em;
+		}
+
+		&__btns {
+			flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+			gap: 0.5em;
 		}
 	}
 }
