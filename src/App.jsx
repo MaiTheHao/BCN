@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./auth/Auth";
 import AppContextProvider from "./contexts/App/AppContextProvider";
 import pages, { adminPages } from "./pages";
+import Test from "./Test";
 
 function App() {
 	return (
@@ -18,6 +19,9 @@ function App() {
 							return <Route key={index} path={page.path} element={page.component} />;
 						})}
 					</Route>
+					{/* <Route path="*" element = {
+						<Test/>
+					}></Route> */}
 				</Routes>
 			</BrowserRouter>
 		</AppContextProvider>

@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { doc, setDoc } from "firebase/firestore";
 import useAppContext from "../../contexts/App/useAppContext";
 import ProfilePreview from "../../components/ProfilePreview/ProfilePreview";
+import CropImage from "../../components/CropImage/CropImage";
 
 const InputField = ({ label, value, onChange, placeholder }) => (
 	<div>
@@ -56,9 +57,8 @@ function reducer(state, action) {
 function UndateInformation() {
 	const { userData, updateUserData } = useAppContext();
 	const [state, dispatch] = useReducer(reducer, initialState);
+	const [cropVisible, setCropVisible] = useState(false);
 	const formRef = useRef(null);
-	const [profilePicPosition, setProfilePicPosition] = useState({ x: 0, y: 0 });
-	const [detailsPosition, setDetailsPosition] = useState({ x: 0, y: 0 });
 
 	useEffect(() => {
 		dispatch({ type: "SET_NAME", payload: userData?.name || "" });
@@ -66,14 +66,6 @@ function UndateInformation() {
 		dispatch({ type: "SET_KHOA", payload: userData?.khoa || "" });
 		dispatch({ type: "SET_PROFILE_PIC", payload: userData?.profilePic || null });
 	}, [userData]);
-
-	const handleProfilePicPositionChange = (position) => {
-		setProfilePicPosition(position);
-	};
-
-	const handleDetailsPositionChange = (position) => {
-		setDetailsPosition(position);
-	};
 
 	const handleDownload = async () => {
 		if (formRef.current === null) {
@@ -102,8 +94,6 @@ function UndateInformation() {
 			className: state.className,
 			khoa: state.khoa,
 			profilePic: state.profilePicBase64,
-			profilePicPosition,
-			detailsPosition,
 		};
 
 		try {
@@ -135,47 +125,64 @@ function UndateInformation() {
 				dispatch({ type: "SET_PROFILE_PIC", payload: URL.createObjectURL(file) });
 			};
 			reader.readAsDataURL(file);
+			setCropVisible(true);
+		}
+	};
+
+	const handleCropPicture = (base64Src) => {
+		if (base64Src) {
+			dispatch({ type: "SET_PROFILE_PIC_BASE64", payload: base64Src });
+			dispatch({ type: "SET_PROFILE_PIC", payload: base64Src });
 		}
 	};
 
 	return (
-		<div className="update-information">
-			<h1>Cập nhật thông tin</h1>
-			<form ref={formRef} className="info-form">
-				<InputField
-					label="Họ tên"
-					value={state.name}
-					onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
-					placeholder="Nhập họ tên"
-				/>
-				<InputField
-					label="Lớp"
-					value={state.className}
-					onChange={(e) => dispatch({ type: "SET_CLASS_NAME", payload: e.target.value })}
-					placeholder="Nhập lớp"
-				/>
-				<InputField
-					label="Chuyên ngành"
-					value={state.khoa}
-					onChange={(e) => dispatch({ type: "SET_KHOA", payload: e.target.value })}
-					placeholder="Nhập chuyên ngành"
-				/>
-				<ProfilePicUpload onChange={handleProfilePicChange} />
-			</form>
-			<ProfilePreview
-				ref={formRef}
-				name={state.name}
-				className={state.className}
-				khoa={state.khoa}
-				profilePic={state.profilePic}
-				onProfilePicPositionChange={handleProfilePicPositionChange}
-				onDetailsPositionChange={handleDetailsPositionChange}
+		<>
+			<CropImage
+				src={state?.profilePic}
+				fixedWidth={250}
+				setStorage={handleCropPicture}
+				visible={cropVisible}
+				setVisible={setCropVisible}
 			/>
-			<div className="info-form__buttons">
-				<button onClick={handleUploadData}>Lưu thay đổi</button>
-				<button onClick={handleDownload}>Tải ảnh về máy</button>
+			{!cropVisible && (
+			<div className="update-information">
+				<h1>Cập nhật thông tin</h1>
+				<form ref={formRef} className="info-form">
+					<InputField
+						label="Họ tên"
+						value={state.name}
+						onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
+						placeholder="Nhập họ tên"
+					/>
+					<InputField
+						label="Lớp"
+						value={state.className}
+						onChange={(e) => dispatch({ type: "SET_CLASS_NAME", payload: e.target.value })}
+						placeholder="Nhập lớp"
+					/>
+					<InputField
+						label="Chuyên ngành"
+						value={state.khoa}
+						onChange={(e) => dispatch({ type: "SET_KHOA", payload: e.target.value })}
+						placeholder="Nhập chuyên ngành"
+					/>
+					<ProfilePicUpload onChange={handleProfilePicChange} />
+				</form>
+				<ProfilePreview
+					ref={formRef}
+					name={state.name}
+					className={state.className}
+					khoa={state.khoa}
+					profilePic={state.profilePic}
+				/>
+				<div className="info-form__buttons">
+					<button onClick={handleUploadData}>Lưu thay đổi</button>
+					<button onClick={handleDownload}>Tải ảnh về máy</button>
+				</div>
 			</div>
-		</div>
+			)}
+		</>
 	);
 }
 
