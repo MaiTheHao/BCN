@@ -80,7 +80,7 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 					</ReactCrop>
 					<div className="comp-cropImage__block__btns">
 						<button onClick={handleExit}>Hủy</button>
-						<button onClick={handleSubmit}>Chọn ảnh</button>
+						<button onClick={handleSubmit}>Cắt ảnh</button>
 					</div>
 				</div>
 			</div>
