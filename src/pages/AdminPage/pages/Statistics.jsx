@@ -17,6 +17,7 @@ const exportAsCSV = (inputData) => {
 		Ho_va_Ten: user.name,
 		Khoa: user.khoa,
 		Lop_danh_nghia: user.className,
+		Profile_pic_base64: user.profile,
 	}));
 	const headers = Object.keys(users[0]).join(",");
 	const rows = users.map((user) => Object.values(user).join(",")).join("\n");
@@ -35,22 +36,26 @@ const exportAsCSV = (inputData) => {
 const Statistics = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filter, setFilter] = useState("name");
+	const [isLoadUser, setIsLoadUser] = useState(false);
 	const [users, setUsers] = useState([]);
 	const [showMode, setShowMode] = useState("text");
 	const statisticsContentRef = useRef(null);
 	const profileRefs = useRef([]);
 
-	useEffect(() => {
-		const loadUsers = async () => {
-			const data = await fetchUsers();
-			setUsers(data);
-		};
-		loadUsers();
-	}, []);
+	const loadUsers = async () => {
+		setIsLoadUser(true);
+		const data = await fetchUsers();
+		setUsers(data);
+		setIsLoadUser(false);
+	};
 
 	useEffect(() => {
 		return () => (profileRefs.current = []);
 	}, [users]);
+
+	useEffect(() => {
+		loadUsers();
+	}, []);
 
 	const filteredUsers = useMemo(() => {
 		return users.filter((user) => user[filter]?.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -129,43 +134,50 @@ const Statistics = () => {
 						</div>
 					</div>
 				</li>
+				<li>
+					<button onClick={loadUsers}>Reload</button>
+				</li>
 			</ul>
 
-			<div className={`statistics-content ${showMode}`} ref={statisticsContentRef}>
-				{showMode === "text" ? (
-					<table>
-						<thead>
-							<tr>
-								<th>UID</th>
-								<th>Họ và Tên</th>
-								<th>Chuyên ngành</th>
-								<th>Lớp danh nghĩa</th>
-							</tr>
-						</thead>
-						<tbody>
-							{filteredUsers.map((user) => (
-								<tr key={user.UID}>
-									<td>{user.UID}</td>
-									<td>{user.name}</td>
-									<td>{user.khoa.toUpperCase()}</td>
-									<td>{user.className}</td>
+			{!isLoadUser ? (
+				<div className={`statistics-content ${showMode}`} ref={statisticsContentRef}>
+					{showMode === "text" ? (
+						<table>
+							<thead>
+								<tr>
+									<th>UID</th>
+									<th>Họ và Tên</th>
+									<th>Chuyên ngành</th>
+									<th>Lớp danh nghĩa</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
-				) : (
-					filteredUsers.map((user, index) => (
-						<ProfilePreview
-							key={user.UID}
-							name={user.name}
-							className={user.className}
-							khoa={user.khoa}
-							profilePic={user.profilePic}
-							ref={(el) => (profileRefs.current[index] = el)}
-						/>
-					))
-				)}
-			</div>
+							</thead>
+							<tbody>
+								{filteredUsers.map((user) => (
+									<tr key={user.UID}>
+										<td>{user.UID}</td>
+										<td>{user.name}</td>
+										<td>{user.khoa.toUpperCase()}</td>
+										<td>{user.className}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					) : (
+						filteredUsers.map((user, index) => (
+							<ProfilePreview
+								key={user.UID}
+								name={user.name}
+								className={user.className}
+								khoa={user.khoa}
+								profilePic={user.profilePic}
+								ref={(el) => (profileRefs.current[index] = el)}
+							/>
+						))
+					)}
+				</div>
+			) : (
+				<div className="loading-spinner"/>
+			)}
 		</div>
 	);
 };

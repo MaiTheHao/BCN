@@ -7,6 +7,7 @@ import { doc, setDoc } from "firebase/firestore";
 import useAppContext from "../../contexts/App/useAppContext";
 import ProfilePreview from "../../components/ProfilePreview/ProfilePreview";
 import CropImage from "../../components/CropImage/CropImage";
+import validateInput from "./validateInput";
 
 const InputField = ({ label, value, onChange, placeholder }) => (
 	<div>
@@ -23,6 +24,16 @@ const ProfilePicUpload = ({ onChange }) => (
 			Ảnh đại diện:
 			<input type="file" accept="image/*" onChange={onChange} />
 			<span className="custom-file-upload">Chọn ảnh</span>
+		</label>
+	</div>
+);
+
+const ProfileCsvUpload = ({ onChange }) => (
+	<div>
+		<label>
+			Hoặc nhập file csv:
+			<input type="file" accept=".csv" onChange={onChange} />
+			<span className="custom-file-upload">Chọn file</span>
 		</label>
 	</div>
 );
@@ -65,6 +76,7 @@ function UndateInformation() {
 		dispatch({ type: "SET_CLASS_NAME", payload: userData?.className || "" });
 		dispatch({ type: "SET_KHOA", payload: userData?.khoa || "" });
 		dispatch({ type: "SET_PROFILE_PIC", payload: userData?.profilePic || null });
+		dispatch({ type: "SET_PROFILE_PIC_BASE64", payload: userData?.profilePic || null });
 	}, [userData]);
 
 	const handleDownload = async () => {
@@ -90,29 +102,29 @@ function UndateInformation() {
 
 	const handleUploadData = async () => {
 		const data = {
-			name: state.name,
-			className: state.className,
-			khoa: state.khoa,
-			profilePic: state.profilePicBase64,
+			name: state?.name,
+			className: state?.className,
+			khoa: state?.khoa,
+			profilePic: state?.profilePicBase64,
 		};
 
-		try {
-			const UID = auth.currentUser.uid;
-			const docRef = await setDoc(doc(db, "userInformation", UID), data);
-			Swal.fire({
-				icon: "success",
-				title: "Thành công!",
-				text: "Thông tin đã được lưu thành công",
-			});
-			updateUserData(data);
-		} catch (error) {
-			console.log(error);
-
-			Swal.fire({
-				icon: "error",
-				title: "Lỗi!",
-				text: "Đã có lỗi xảy ra khi lưu thông tin",
-			});
+		if (validateInput(data)) {
+			try {
+				const UID = auth.currentUser.uid;
+				const docRef = await setDoc(doc(db, "userInformation", UID), data);
+				Swal.fire({
+					icon: "success",
+					title: "Thành công!",
+					text: "Thông tin đã được lưu thành công",
+				});
+				updateUserData(data);
+			} catch (error) {
+				Swal.fire({
+					icon: "error",
+					title: "Lỗi!",
+					text: "Đã có lỗi xảy ra khi lưu thông tin",
+				});
+			}
 		}
 	};
 
@@ -129,10 +141,17 @@ function UndateInformation() {
 		}
 	};
 
+	const handleProfileCsvChange = (e) => {
+		if (e.target.files && e.target.files[0]) {
+			const file = e.target.files[0];
+			const reader = new FileReader();
+			console.log(reader);
+		}
+	};
+
 	const handleCropPicture = (base64Src) => {
 		if (base64Src) {
 			dispatch({ type: "SET_PROFILE_PIC_BASE64", payload: base64Src });
-			dispatch({ type: "SET_PROFILE_PIC", payload: base64Src });
 		}
 	};
 
@@ -140,47 +159,50 @@ function UndateInformation() {
 		<>
 			<CropImage
 				src={state?.profilePic}
-				fixedWidth={Math.min(Math.max(170, appContext?.screenW * (5/28)), 250)}
+				fixedWidth={Math.min(Math.max(170, appContext?.screenW * (5 / 28)), 250)}
 				setStorage={handleCropPicture}
 				visible={cropVisible}
 				setVisible={setCropVisible}
 			/>
 			{!cropVisible && (
-			<div className="update-information">
-				<h1>Cập nhật thông tin</h1>
-				<form ref={formRef} className="info-form">
-					<InputField
-						label="Họ tên"
-						value={state.name}
-						onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
-						placeholder="Nhập họ tên"
+				<div className="update-information">
+					<h1>Cập nhật thông tin</h1>
+					<form ref={formRef} className="info-form">
+						<InputField
+							label="Họ tên"
+							value={state.name}
+							onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
+							placeholder="Nhập họ tên"
+						/>
+						<InputField
+							label="Lớp"
+							value={state.className}
+							onChange={(e) => dispatch({ type: "SET_CLASS_NAME", payload: e.target.value })}
+							placeholder="Nhập lớp"
+						/>
+						<InputField
+							label="Chuyên ngành"
+							value={state.khoa}
+							onChange={(e) => dispatch({ type: "SET_KHOA", payload: e.target.value })}
+							placeholder="Nhập chuyên ngành"
+						/>
+						<ProfilePicUpload onChange={handleProfilePicChange} />
+						<ProfileCsvUpload onChange={handleProfileCsvChange} />
+					</form>
+					<ProfilePreview
+						ref={formRef}
+						name={state.name}
+						className={state.className}
+						khoa={state.khoa}
+						profilePic={state.profilePicBase64}
+						onClickImg={() => setCropVisible(true)}
 					/>
-					<InputField
-						label="Lớp"
-						value={state.className}
-						onChange={(e) => dispatch({ type: "SET_CLASS_NAME", payload: e.target.value })}
-						placeholder="Nhập lớp"
-					/>
-					<InputField
-						label="Chuyên ngành"
-						value={state.khoa}
-						onChange={(e) => dispatch({ type: "SET_KHOA", payload: e.target.value })}
-						placeholder="Nhập chuyên ngành"
-					/>
-					<ProfilePicUpload onChange={handleProfilePicChange} />
-				</form>
-				<ProfilePreview
-					ref={formRef}
-					name={state.name}
-					className={state.className}
-					khoa={state.khoa}
-					profilePic={state.profilePic}
-				/>
-				<div className="info-form__buttons">
-					<button onClick={handleUploadData}>Lưu thay đổi</button>
-					<button onClick={handleDownload}>Tải ảnh về máy</button>
+					<span id="update-information-note">Hãy nhấn vào ảnh để căn chỉnh lại</span>
+					<div className="info-form__buttons">
+						<button onClick={handleUploadData}>Lưu thay đổi</button>
+						<button onClick={handleDownload}>Tải ảnh về máy</button>
+					</div>
 				</div>
-			</div>
 			)}
 		</>
 	);

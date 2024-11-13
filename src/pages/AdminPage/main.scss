@@ -128,6 +128,12 @@ $transition-duration: 0.2s;
 							padding: 0 0.5em;
 						}
 					}
+
+					&__reload {
+						cursor: pointer;
+						background-color: #141414;
+						color: white;
+					}
 				}
 
 				.statistics-actions {
@@ -217,8 +223,7 @@ $transition-duration: 0.2s;
 				}
 
 				.statistics-content {
-
-					&.text{
+					&.text {
 						width: 100%;
 						overflow: auto;
 					}
@@ -228,9 +233,9 @@ $transition-duration: 0.2s;
 						width: 100%;
 						border-collapse: collapse;
 
-						font-size: clamp(.8em, 1.7vw, 1em);
+						font-size: clamp(0.8em, 1.7vw, 1em);
 
-						*{
+						* {
 							text-wrap: nowrap;
 						}
 
@@ -261,6 +266,24 @@ $transition-duration: 0.2s;
 								}
 							}
 						}
+					}
+				}
+				
+				.loading-spinner {
+					border: 4px solid rgba(0, 0, 0, 0.1);
+					border-top: 4px solid #007bff;
+					border-radius: 50%;
+					width: 2em;
+					height: 2em;
+					animation: spin 1s linear infinite;
+				}
+
+				@keyframes spin {
+					0% {
+						transform: rotate(0deg);
+					}
+					100% {
+						transform: rotate(360deg);
 					}
 				}
 			}

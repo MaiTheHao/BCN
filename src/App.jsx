@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./auth/Auth";
 import AppContextProvider from "./contexts/App/AppContextProvider";
 import pages, { adminPages } from "./pages";
-import Test from "./Test";
 
 function App() {
 	return (
