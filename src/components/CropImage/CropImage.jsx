@@ -12,7 +12,7 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 	const [crop, setCrop] = useState(initCrop);
 	const imgRef = useRef(null);
 
-	const handleCropImage = () => {
+	const getCroppedImage = () => {
 		const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
 		const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
 		const scaleWidth = crop.width * scaleX;
@@ -30,7 +30,7 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 	};
 
 	const handleSubmit = () => {
-		const base64Image = handleCropImage();
+		const base64Image = getCroppedImage();
 
 		if (base64Image) {
 			try {
@@ -42,7 +42,6 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 					icon: "success",
 				});
 			} catch (error) {
-				console.log(error);
 				Swal.fire({
 					title: "Lỗi",
 					text: "Không thể lưu ảnh",

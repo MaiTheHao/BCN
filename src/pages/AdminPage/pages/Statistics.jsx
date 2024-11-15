@@ -1,36 +1,15 @@
 import { collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { db } from "../../../FB/db";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faFileCsv, faFileImage, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfilePreview from "../../../components/ProfilePreview/ProfilePreview";
 import { toPng } from "html-to-image";
+import { handleDownloadProfileCSVs } from "../../../components/handle/DownloadProfileCSV";
 
 const fetchUsers = async () => {
 	const res = await getDocs(collection(db, "userInformation"));
 	return res.docs.map((doc) => ({ UID: doc.id, ...doc.data() }));
-};
-
-const exportAsCSV = (inputData) => {
-	const users = inputData.map((user) => ({
-		UID: user.UID,
-		Ho_va_Ten: user.name,
-		Khoa: user.khoa,
-		Lop_danh_nghia: user.className,
-		Profile_pic_base64: user.profile,
-	}));
-	const headers = Object.keys(users[0]).join(",");
-	const rows = users.map((user) => Object.values(user).join(",")).join("\n");
-	const csv = headers + "\n" + rows;
-	const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-	const link = document.createElement("a");
-	const url = URL.createObjectURL(blob);
-	link.setAttribute("href", url);
-	link.setAttribute("download", "users.csv");
-	document.body.appendChild(link);
-	link.click();
-	document.body.removeChild(link);
-	URL.revokeObjectURL(url);
 };
 
 const Statistics = () => {
@@ -95,7 +74,7 @@ const Statistics = () => {
 		if (type === "image") {
 			showMode === "text" ? handleExportTableAsImage() : handleExportAllProfilesAsImages();
 		} else if (type === "csv") {
-			exportAsCSV(filteredUsers);
+			handleDownloadProfileCSVs(filteredUsers, `statistics-${Date.now()}-total_${filteredUsers.length}_users`);
 		}
 	};
 
@@ -123,14 +102,20 @@ const Statistics = () => {
 			</div>
 			<ul className="statistics-actions">
 				<li>
-					<button onClick={toggleShowMode}>{showMode === "text" ? "Xem Image" : "Xem Text"}</button>
+					<button onClick={toggleShowMode}>{showMode === "text" ? "Xem ảnh" : "Xem văn bản"}</button>
 				</li>
 				<li>
 					<div className="dropdown">
 						<button className="dropbtn">Xuất File</button>
 						<div className="dropdown-content">
-							<a onClick={() => handleExport("image")}>Xuất ảnh</a>
-							<a onClick={() => handleExport("csv")}>Xuất csv</a>
+							<a onClick={() => handleExport("image")}>
+								<FontAwesomeIcon icon={faFileImage} />
+								Xuất ảnh
+							</a>
+							<a onClick={() => handleExport("csv")}>
+								<FontAwesomeIcon icon={faFileCsv} />
+								Xuất csv
+							</a>
 						</div>
 					</div>
 				</li>
@@ -176,7 +161,7 @@ const Statistics = () => {
 					)}
 				</div>
 			) : (
-				<div className="loading-spinner"/>
+				<div className="loading-spinner" />
 			)}
 		</div>
 	);

@@ -38,6 +38,7 @@ body {
 	padding: 0 20px;
 }
 
+// Cần tự điều chỉnh top và right của wrapper
 .wrapper {
 	position: absolute;
 	top: 170%;
@@ -91,6 +92,46 @@ body {
 	}
 }
 
+// Cần tự điều chỉnh width và min width của container
+.select-container {
+	position: relative;
+	width: 100%;
+	min-width: 3ch;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: transparent;
+
+	.select-box {
+		position: relative;
+		cursor: pointer;
+		width: 100%;
+		appearance: none;
+		background-color: black;
+		color: white;
+		padding: 0.625em 2.5em 0.625em 1.25em;
+		border-radius: 0.25em;
+		text-align: center;
+	}
+
+	.select-icon{
+		position: absolute;
+		width: 2em;
+		height: 100%;
+
+		right: 0;
+
+		color: white;
+		background-color: rgb(47, 47, 47);
+		border-radius: 0 0.25em 0.25em 0;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
+
 @keyframes wrapperOpen {
 	from {
 		opacity: 0;
@@ -99,5 +140,11 @@ body {
 	to {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+@media screen and (max-width: 900px) {
+	#root{
+		font-size: clamp(0.8em, 2.5vw, 1em);;
 	}
 }

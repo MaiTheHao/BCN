@@ -8,6 +8,8 @@ import useAppContext from "../../contexts/App/useAppContext";
 import ProfilePreview from "../../components/ProfilePreview/ProfilePreview";
 import CropImage from "../../components/CropImage/CropImage";
 import validateInput from "./validateInput";
+import CSV from "../../components/handle/CSV";
+import IMG from "../../components/handle/IMG";
 
 const InputField = ({ label, value, onChange, placeholder }) => (
 	<div>
@@ -38,14 +40,19 @@ const ProfileCsvUpload = ({ onChange }) => (
 	</div>
 );
 
+const SubmitButtons = ({handleUploadData, handleDownload}) => (
+	<div className="info-form__buttons">
+		<button onClick={handleUploadData}>Lưu thay đổi</button>
+		<button onClick={handleDownload}>Tải ảnh về máy</button>
+	</div>
+);
+
 const initialState = {
 	name: "",
 	className: "",
 	khoa: "",
 	profilePic: null,
-	profilePicBase64: null,
-	profilePicPosition: { x: 0, y: 0 },
-	detailsPosition: { x: 0, y: 0 },
+	profilePicUploaded: null,
 };
 
 function reducer(state, action) {
@@ -58,8 +65,8 @@ function reducer(state, action) {
 			return { ...state, khoa: action.payload };
 		case "SET_PROFILE_PIC":
 			return { ...state, profilePic: action.payload };
-		case "SET_PROFILE_PIC_BASE64":
-			return { ...state, profilePicBase64: action.payload };
+		case "SET_PROFILE_PIC_UPLOADED":
+			return { ...state, profilePicUploaded: action.payload };
 		default:
 			return state;
 	}
@@ -76,7 +83,7 @@ function UndateInformation() {
 		dispatch({ type: "SET_CLASS_NAME", payload: userData?.className || "" });
 		dispatch({ type: "SET_KHOA", payload: userData?.khoa || "" });
 		dispatch({ type: "SET_PROFILE_PIC", payload: userData?.profilePic || null });
-		dispatch({ type: "SET_PROFILE_PIC_BASE64", payload: userData?.profilePic || null });
+		dispatch({ type: "SET_PROFILE_PIC_UPLOADED", payload: userData?.profilePic || null });
 	}, [userData]);
 
 	const handleDownload = async () => {
@@ -105,7 +112,7 @@ function UndateInformation() {
 			name: state?.name,
 			className: state?.className,
 			khoa: state?.khoa,
-			profilePic: state?.profilePicBase64,
+			profilePic: state?.profilePic,
 		};
 
 		if (validateInput(data)) {
@@ -128,37 +135,39 @@ function UndateInformation() {
 		}
 	};
 
-	const handleProfilePicChange = (e) => {
+	const handleProfilePicChange = async (e) => {
 		if (e.target.files && e.target.files[0]) {
-			const file = e.target.files[0];
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				dispatch({ type: "SET_PROFILE_PIC_BASE64", payload: reader.result });
-				dispatch({ type: "SET_PROFILE_PIC", payload: URL.createObjectURL(file) });
-			};
-			reader.readAsDataURL(file);
+			const myIMG = new IMG(e.target.files[0]);
+			await myIMG.readFilePromise;
+			dispatch({ type: "SET_PROFILE_PIC", payload: myIMG.IMGDataUrl });
+			dispatch({ type: "SET_PROFILE_PIC_UPLOADED", payload: myIMG.IMGDataUrl });
 			setCropVisible(true);
 		}
 	};
 
-	const handleProfileCsvChange = (e) => {
+	const handleProfileCsvChange = async (e) => {
 		if (e.target.files && e.target.files[0]) {
-			const file = e.target.files[0];
-			const reader = new FileReader();
-			console.log(reader);
+			const myCSV = new CSV(e.target.files[0]);
+			await myCSV.readFilePromise;
+			const data = myCSV.readSingleUserData();
+
+			dispatch({ type: "SET_NAME", payload: data[1] });
+			dispatch({ type: "SET_KHOA", payload: data[2] });
+			dispatch({ type: "SET_CLASS_NAME", payload: data[3] });
+			dispatch({ type: "SET_PROFILE_PIC", payload: data[4] });
 		}
 	};
 
 	const handleCropPicture = (base64Src) => {
 		if (base64Src) {
-			dispatch({ type: "SET_PROFILE_PIC_BASE64", payload: base64Src });
+			dispatch({ type: "SET_PROFILE_PIC", payload: base64Src });
 		}
 	};
 
 	return (
 		<>
 			<CropImage
-				src={state?.profilePic}
+				src={state?.profilePicUploaded}
 				fixedWidth={Math.min(Math.max(170, appContext?.screenW * (5 / 28)), 250)}
 				setStorage={handleCropPicture}
 				visible={cropVisible}
@@ -189,19 +198,18 @@ function UndateInformation() {
 						<ProfilePicUpload onChange={handleProfilePicChange} />
 						<ProfileCsvUpload onChange={handleProfileCsvChange} />
 					</form>
+
 					<ProfilePreview
 						ref={formRef}
 						name={state.name}
 						className={state.className}
 						khoa={state.khoa}
-						profilePic={state.profilePicBase64}
+						profilePic={state.profilePic}
 						onClickImg={() => setCropVisible(true)}
 					/>
+
 					<span id="update-information-note">Hãy nhấn vào ảnh để căn chỉnh lại</span>
-					<div className="info-form__buttons">
-						<button onClick={handleUploadData}>Lưu thay đổi</button>
-						<button onClick={handleDownload}>Tải ảnh về máy</button>
-					</div>
+					<SubmitButtons handleDownload={handleDownload} handleUploadData={handleUploadData}/>
 				</div>
 			)}
 		</>

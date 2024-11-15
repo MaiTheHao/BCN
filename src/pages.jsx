@@ -1,5 +1,5 @@
 import UpdateInformation from "./pages/UpdateInformation/UndateInformation";
-import ExportPic from "./pages/ExportPic/ExportPic";
+import ExportInformation from "./pages/ExportInformation/ExportInformation";
 import Layout from "./components/Layout/Layout";
 import { Navigate } from "react-router-dom";
 import AdminPage from "./pages/AdminPage/AdminPage";
@@ -16,17 +16,17 @@ const pages = [
 		),
 	},
 	{
-		path: "xuat-anh",
-		name: "Xuất ảnh",
+		path: "xuat-thong-tin",
+		name: "Xuất thông tin",
 		component: (
 			<Layout>
-				<ExportPic />
+				<ExportInformation />
 			</Layout>
 		),
 	},
 	{
 		path: "*",
-		component: <Navigate to="xuat-anh" />,
+		component: <Navigate to="xuat-thong-tin" />,
 	},
 ];
 
