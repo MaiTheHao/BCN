@@ -1,5 +1,3 @@
-import Swal from "sweetalert2";
-
 export const validateSignup = (values) => {
 	let errors = {};
 
@@ -12,11 +10,6 @@ export const validateSignup = (values) => {
 	if (values.password && values.checkpassword) {
 		if (values.password !== values.checkpassword) {
 			errors.checkpassword = "Mật khẩu không khớp";
-			Swal.fire({
-				icon: "error",
-				title: "Sai mật khẩu xác nhận",
-				text: "Mật khẩu không khớp",
-			});
 		}
 	} else {
 		if (!values.password) {

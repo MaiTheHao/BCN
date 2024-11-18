@@ -9,6 +9,7 @@ const LoginContextProvider = ({ children }) => {
 	const { handleSetAuth } = useAppContext();
 	const [crrPage, setCrrPage] = useState("signin");
 	const [inputValue, setInputValue] = useState({});
+	const [isFetchAuth, setIsFetchAuth] = useState(false);
 	const [errors, setErrors] = useState({});
 	const handleInputChange = (e) => {
 		setInputValue({ ...inputValue, [e.target.name]: e.target.value });
@@ -19,6 +20,7 @@ const LoginContextProvider = ({ children }) => {
 		const validationErrors = crrPage === "signin" ? validateSignin(inputValue) : validateSignup(inputValue);
 
 		if (Object.keys(validationErrors).length === 0) {
+			setIsFetchAuth(true);
 			setErrors({});
 			let res =
 				crrPage === "signin"
@@ -38,11 +40,13 @@ const LoginContextProvider = ({ children }) => {
 						title: "Đăng ký thành công",
 						text: "Vui lòng kiểm tra email và xác thực tài khoản",
 					});
+					changePage();
 				}
 			}
 		} else {
 			setErrors(validationErrors);
 		}
+		setIsFetchAuth(false);
 	};
 
 	const changePage = () => {
@@ -52,7 +56,7 @@ const LoginContextProvider = ({ children }) => {
 	};
 
 	return (
-		<LoginContext.Provider value={{ crrPage, changePage, handleInputChange, handleFormSubmit, errors, inputValue }}>
+		<LoginContext.Provider value={{ crrPage, changePage, handleInputChange, handleFormSubmit, errors, inputValue, isFetchAuth}}>
 			{children}
 		</LoginContext.Provider>
 	);

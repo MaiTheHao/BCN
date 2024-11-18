@@ -30,7 +30,7 @@ const AppContextProvider = ({ children }) => {
 		setCrrPage(_crrPage);
 
 		if (preventCookie) return;
-		Cookies.set("crrPage", _crrPage);
+		Cookies.set("crrPage", _crrPage, { expires: (60 / 86400) });
 	};
 
 	const updateUserData = (newData) => {

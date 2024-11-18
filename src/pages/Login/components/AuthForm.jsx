@@ -1,18 +1,19 @@
 import React from "react";
 import useLoginContext from "../../../contexts/Login/useLoginContext";
 import { faAt, faLock, faShieldHalved } from "@fortawesome/free-solid-svg-icons";
-import FormInput from "./FormInput";
+import CustomFormInput from "./CusTomFormInput";
 import FormBtns from "./FormBtns";
+import Loading from "../../../components/Loading/Loading";
 
 function AuthForm() {
-	const { crrPage, changePage, handleInputChange, handleFormSubmit, errors, inputValue } = useLoginContext();
+	const { crrPage, changePage, handleInputChange, handleFormSubmit, errors, inputValue, isFetchAuth} = useLoginContext();
 
 	const signupInputs = [
 		{
 			icon: faShieldHalved,
 			type: "password",
 			name: "checkpassword",
-			placeholder: "Check password",
+			placeholder: "Xác nhận mật khẩu",
 			error: errors.checkpassword,
 		},
 	];
@@ -29,7 +30,7 @@ function AuthForm() {
 			icon: faLock,
 			type: "password",
 			name: "password",
-			placeholder: "Password",
+			placeholder: "Mật khẩu",
 			error: errors.password,
 		},
 	];
@@ -37,13 +38,13 @@ function AuthForm() {
 	const renderInputs = (inputs) =>
 		inputs.map((input, index) => (
 			<React.Fragment key={index}>
-				<FormInput
+				<CustomFormInput
 					icon={input.icon}
 					type={input.type}
 					name={input.name}
 					placeholder={input.placeholder}
 					onChange={handleInputChange}
-                    inputValue={inputValue[input?.name]}
+					inputValue={inputValue[input?.name]}
 				/>
 				{input.error && <p className="inputs-error">{input.error}</p>}
 			</React.Fragment>
@@ -58,13 +59,13 @@ function AuthForm() {
 			</div>
 			<FormBtns
 				mainActionName={crrPage === "signup" ? "Đăng ký" : "Đăng nhập"}
-				otherActionName={crrPage === "signup" ? "Đăng nhập" : "Đăng ký"}
+				otherActionName={crrPage === "signup" ? "Đã có tài khoản ?" : "Chưa có tài khoản ?"}
 				otherActionOnClick={changePage}
 			/>
 		</form>
 	);
 
-	return <>{(crrPage === "signup" || crrPage === "signin") && renderForm()}</>;
+	return <>{isFetchAuth ? <Loading message={crrPage === "signup" ? "Đang đăng ký" : "Đang đăng nhập"} /> : ((crrPage === "signup" || crrPage === "signin") && renderForm())}</>;
 }
 
 export default AuthForm;

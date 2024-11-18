@@ -67,7 +67,13 @@ $gap: 0.5em;
 		gap: $gap;
 
 		button {
+			height: 2.5em;
 			width: 45%;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
 			padding: 0.625em 1.25em;
 			background-color: $primary-color;
 			color: #fff;
@@ -80,11 +86,39 @@ $gap: 0.5em;
 				background-color: $primary-color-hover;
 			}
 		}
+
+		button[disabled] {
+			background-color: gray;
+			cursor: not-allowed;
+
+			span{
+				display: none;
+			}
+
+			div{
+				width: 1em;
+				height: 1em;
+				border-radius: 50%;
+				border: 0.1em solid white;
+				border-top: 0.1em solid $primary-color;
+				border-bottom: 0.1em solid $primary-color;
+				animation: spin .7s linear infinite;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+		}
 	}
 }
 
-#update-information-note{
-	font-size: .9em;
+#update-information-note {
+	font-size: 0.9em;
 	color: gray;
 }
 

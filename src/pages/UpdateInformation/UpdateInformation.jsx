@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, useState, useEffect } from "react";
+import React, { useReducer, useRef, useState, useEffect, forwardRef } from "react";
 import * as htmlToImage from "html-to-image";
 import { db, auth } from "../../FB/db";
 import "./main.scss";
@@ -40,12 +40,18 @@ const ProfileCsvUpload = ({ onChange }) => (
 	</div>
 );
 
-const SubmitButtons = ({handleUploadData, handleDownload}) => (
-	<div className="info-form__buttons">
-		<button onClick={handleUploadData}>Lưu thay đổi</button>
-		<button onClick={handleDownload}>Tải ảnh về máy</button>
-	</div>
-);
+const SubmitButtons = ((props) => {
+	const { handleUploadData, handleDownload, submitButtonRef, downloadButtonRef } = props;
+	return (
+		<div className="info-form__buttons">
+			<button onClick={handleUploadData} ref={submitButtonRef} disabled={false}>
+				<span>Lưu thay đổi</span><div></div>
+			</button>
+			<button onClick={handleDownload} ref={downloadButtonRef} disabled={false}>
+				<span>Tải ảnh về máy</span><div></div></button>
+		</div>
+	);
+});
 
 const initialState = {
 	name: "",
@@ -72,11 +78,13 @@ function reducer(state, action) {
 	}
 }
 
-function UndateInformation() {
+function UpdateInformation() {
 	const { appContext, userData, updateUserData } = useAppContext();
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [cropVisible, setCropVisible] = useState(false);
 	const formRef = useRef(null);
+	const submitButtonRef = useRef(null);
+	const downloadButtonRef = useRef(null);
 
 	useEffect(() => {
 		dispatch({ type: "SET_NAME", payload: userData?.name || "" });
@@ -91,6 +99,7 @@ function UndateInformation() {
 			return;
 		}
 
+		downloadButtonRef.current.disabled = true;
 		try {
 			const res = await htmlToImage.toPng(formRef.current);
 			const link = document.createElement("a");
@@ -105,6 +114,7 @@ function UndateInformation() {
 				text: "Đã có lỗi xảy ra khi tải ảnh",
 			});
 		}
+		downloadButtonRef.current.disabled = false;
 	};
 
 	const handleUploadData = async () => {
@@ -116,6 +126,7 @@ function UndateInformation() {
 		};
 
 		if (validateInput(data)) {
+			submitButtonRef.current.disabled = true;
 			try {
 				const UID = auth.currentUser.uid;
 				const docRef = await setDoc(doc(db, "userInformation", UID), data);
@@ -132,6 +143,8 @@ function UndateInformation() {
 					text: "Đã có lỗi xảy ra khi lưu thông tin",
 				});
 			}
+
+			submitButtonRef.current.disabled = false;
 		}
 	};
 
@@ -203,17 +216,21 @@ function UndateInformation() {
 						ref={formRef}
 						name={state.name}
 						className={state.className}
-						khoa={state.khoa}
 						profilePic={state.profilePic}
 						onClickImg={() => setCropVisible(true)}
 					/>
 
 					<span id="update-information-note">Hãy nhấn vào ảnh để căn chỉnh lại</span>
-					<SubmitButtons handleDownload={handleDownload} handleUploadData={handleUploadData}/>
+					<SubmitButtons
+						handleDownload={handleDownload}
+						handleUploadData={handleUploadData}
+						submitButtonRef={submitButtonRef}
+						downloadButtonRef={downloadButtonRef}
+					/>
 				</div>
 			)}
 		</>
 	);
 }
 
-export default UndateInformation;
+export default UpdateInformation;

@@ -1,0 +1,121 @@
+$primary-color: #007bff;
+$button-padding: 0.625em 1.25em;
+$button-border-radius: 0.25em;
+$button-min-width: 4em;
+$button-min-height: 2.5em;
+$button-bg-color: $primary-color;
+$button-hover-bg-color: #0056b3;
+$button-disabled-bg-color: gray;
+$button-text-color: #fff;
+
+@mixin button-styles {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: $button-min-width;
+	min-height: $button-min-height;
+	text-align: center;
+	padding: $button-padding;
+	background-color: $button-bg-color;
+	color: $button-text-color;
+	border: none;
+	border-radius: $button-border-radius;
+	cursor: pointer;
+
+	&:hover {
+		background-color: $button-hover-bg-color;
+	}
+}
+
+@mixin spinner {
+	width: 1em;
+	height: 1em;
+	border-radius: 50%;
+	border: 0.1em solid white;
+	border-top: 0.1em solid $primary-color;
+	border-bottom: 0.1em solid $primary-color;
+	animation: spin .7s linear infinite;
+}
+
+.export-pic {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1.25em;
+
+	h1 {
+		margin-bottom: 1.25em;
+		text-transform: capitalize;
+	}
+
+	&__download {
+		position: relative;
+		min-width: 40%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: stretch;
+		gap: 0.5em;
+
+		button {
+			@include button-styles;
+		}
+
+		button[disabled] {
+			background-color: $button-disabled-bg-color;
+			cursor: not-allowed;
+
+			span {
+				display: none;
+			}
+
+			div {
+				@include spinner;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+		}
+
+		&__content {
+			display: flex;
+			align-items: center;
+			gap: 0.2em;
+
+			&__pic {
+				width: 70%;
+				height: 100%;
+			}
+
+			&__csv {
+				width: 30%;
+				height: 100%;
+			}
+		}
+	}
+}
+
+@media (max-width: 900px) {
+	.info-form__buttons {
+		font-size: 0.9em;
+	}
+
+	.info-preview-body__profilePic {
+		height: calc(80vw / 100px * 23.913px) !important;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.export-pic {
+		&__download {
+			min-width: 80%;
+			font-size: clamp(0.8em, 2.5vw, 1em);
+		}
+	}
+}

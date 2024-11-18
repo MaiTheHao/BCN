@@ -1,9 +1,10 @@
-import UpdateInformation from "./pages/UpdateInformation/UndateInformation";
+import UpdateInformation from "./pages/UpdateInformation/UpdateInformation";
 import ExportInformation from "./pages/ExportInformation/ExportInformation";
 import Layout from "./components/Layout/Layout";
 import { Navigate } from "react-router-dom";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import LayoutAdmin from "./components/Layout/LayoutAdmin";
+import Cookies from "js-cookie";
 
 const pages = [
 	{
@@ -26,7 +27,7 @@ const pages = [
 	},
 	{
 		path: "*",
-		component: <Navigate to="xuat-thong-tin" />,
+		component: <Navigate to={Cookies.get("crrPage") || "xuat-thong-tin"} />,
 	},
 ];
 

@@ -1,96 +1,133 @@
-#loginPage{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#loginPage {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-    form{
-        position: relative;
-        max-width: 400px;
-        width: 100%;
-        height: max-content;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
+	form {
+		position: relative;
+		max-width: 400px;
+		width: 100%;
+		height: max-content;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
 
-        gap: 2em;
-        background-color: white;
-        padding: 2em 2em;
+		gap: 2em;
+		background-color: white;
+		padding: 2em 2em;
 
-        *{
-            position: relative;
-            width: 100%;
-        }
+		animation: form-fade-in 0.3s ease-in;
 
-        h2{
-            text-align: center;
-            font-size: 1.8em;
-            text-transform: uppercase;
-        }
+		* {
+			position: relative;
+			width: 100%;
+		}
 
-        .inputs{
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
+		h2 {
+			text-align: center;
+			font-size: 1.8em;
+			text-transform: uppercase;
+		}
 
-            &-error{
-                font-size: .8em;
-                color: red;
-            }
-        }
+		.inputs {
+			display: flex;
+			flex-direction: column;
+			gap: 1em;
 
-        .buttons{
-            display: flex;
-            justify-content: space-between;
+			&-error {
+				padding: 0.5em 1em;
 
-            &-good{
-                width: 50%;
-                background-color: rgb(64, 255, 0);
-            }
+				font-size: 0.8em;
+				color: rgb(240, 0, 0);
+				background-color: rgba(255, 0, 0, 0.1);
 
-            &-bad{
-                width: 40%;
-                background-color: rgb(255, 183, 0);
-            }
+				animation: inputs-error-fade-in 0.3s ease-in;
+			}
 
-            button{
-                padding: .2em 1em;
-                border-radius: 1em;
-                color: white;
-                cursor: pointer;
-                transition: all 0.1s ease-in;
+			@keyframes inputs-error-fade-in {
+				from {
+					opacity: 0;
+					transform: translateY(-20%);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+		}
 
-                &:hover{
-                    transform: scale(1.02);
-                }
+		.buttons {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
 
-                &:active{
-                    transform: scale(1);
-                }
-            }
-        }
-    }
+			.buttons-part {
+				&:first-child {
+					padding-bottom: 1.25em;
+					border-bottom: 0.02em solid black;
 
-    .input-comp{
-        display: flex;
-        gap: .5em;
-        align-items: center;
-        svg{
-            min-width: max-content;
-            width: 2em;
-            font-size: 1em;
-        }
+					.button--good {
+						color: white;
+						background-color: rgb(64, 255, 0);
+					}
+				}
 
-        input{
-            background-color: transparent;
-        }
+				&:last-child {
+					padding-top: 1.25em;
+					border-top: 0.02em solid black;
 
-        &:not(:last-child){
-            border-bottom: 0.01em solid black;
-            padding-bottom: 0.75em;
-        }
-    }
+					.button--bad {
+						border: 0.05em solid rgb(200, 200, 200);
+						color: rgb(47, 47, 47);
+						background-color: rgb(240, 240, 240);
+					}
+				}
+			}
+
+			button {
+				height: 2.5em;
+
+				padding: 0.2em 1em;
+				border-radius: 0.2em;
+				cursor: pointer;
+				transition: all 0.1s ease-in;
+			}
+		}
+	}
+
+	.input-comp {
+		display: flex;
+		gap: 0.5em;
+		align-items: center;
+		svg {
+			min-width: max-content;
+			width: 2em;
+			font-size: 1em;
+		}
+
+		input {
+			background-color: transparent;
+		}
+
+		&:not(:last-child) {
+			border-bottom: 0.01em solid black;
+			padding-bottom: 0.75em;
+		}
+	}
+
+	@keyframes form-fade-in {
+		from{
+			opacity: 0;
+			transform: scale(.6);
+		}
+
+		to{
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
 }
