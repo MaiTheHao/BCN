@@ -143,11 +143,11 @@ function UpdateInformation() {
 			) {
 				return true;
 			}
-	
+
 			setIsAsync(true);
 			return false;
 		};
-	
+
 		if (isDataChanged(state, userData) && isFectData) {
 			setIsAsync(false);
 			const { profilePicUploaded, ...newState } = state;
@@ -164,14 +164,15 @@ function UpdateInformation() {
 
 	return (
 		<>
-			<CropImage
-				src={state?.profilePicUploaded}
-				fixedWidth={Math.min(Math.max(170, appContext?.screenW * (5 / 28)), 250)}
-				setStorage={handleCropPicture}
-				visible={cropVisible}
-				setVisible={setCropVisible}
-			/>
-			{!cropVisible && (
+			{cropVisible ? (
+				<CropImage
+					src={state?.profilePicUploaded}
+					fixedWidth={Math.min(Math.max(170, appContext?.screenW * (5 / 28)), 250)}
+					setStorage={handleCropPicture}
+					visible={cropVisible}
+					setVisible={setCropVisible}
+				/>
+			) : (
 				<div className="update-information">
 					<div className="update-information__part update-information__form">
 						<form action="">
@@ -228,7 +229,14 @@ function UpdateInformation() {
 								onClick={handleUploadData}
 								disabled={isUploading}
 							>
-								{isUploading ? <>Đang lưu<FontAwesomeIcon icon={faSpinner} pulse /></> : "Lưu thông tin"}
+								{isUploading ? (
+									<>
+										Đang lưu
+										<FontAwesomeIcon icon={faSpinner} pulse />
+									</>
+								) : (
+									"Lưu thông tin"
+								)}
 							</button>
 							<div className="update-information__profile__process__async update-information__profile__process__element">
 								<span>{isAsync ? "Đã lưu" : "Chưa lưu"}</span>

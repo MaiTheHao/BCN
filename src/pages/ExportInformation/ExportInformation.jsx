@@ -13,9 +13,9 @@ function ExportInformation() {
 	const downloadPicButtonRef = useRef(null);
 	const downloadCsvButtonRef = useRef(null);
 
-	const name = userData?.name || "...";
-	const className = userData?.className || "Không";
-	const khoa = userData?.khoa || "Không";
+	const name = userData?.name;
+	const className = userData?.className;
+	const khoa = userData?.khoa;
 	const profilePic = userData?.profilePic || null;
 
 	const handleDownloadPic = async () => {

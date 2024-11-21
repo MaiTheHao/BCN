@@ -3,6 +3,12 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, se
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
+const handleResetBackup = () => {
+	localStorage.removeItem("UpdateInformation-state--state");
+	Cookies.remove("crrPage");
+	Cookies.remove("userUpdatingData");
+}
+
 const signIn = async (email, password) => {
 	try {
 		const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -16,6 +22,7 @@ const signIn = async (email, password) => {
 			return undefined;
 		}
 
+		handleResetBackup();
 		return user;
 	} catch (error) {
 		const text = error.code === "auth/user-not-found" ? "Email không tồn tại" : "Mật khẩu không đúng";
@@ -33,6 +40,7 @@ const signUp = async (email, password) => {
 		const { user } = await createUserWithEmailAndPassword(auth, email, password);
 		await signOut(auth);
 		await sendEmailVerification(user);
+		handleResetBackup();
 		return user;
 	} catch (error) {
 		const text = error.code === "auth/email-already-in-use" ? "Email đã tồn tại" : "Mật khẩu phải có ít nhất 6 ký tự";
@@ -45,15 +53,10 @@ const signUp = async (email, password) => {
 	}
 };
 
-const resetCookieWhenLogout = () => {
-	Cookies.remove("crrPage");
-	Cookies.remove("userUpdatingData");
-}
-
 const logout = async () => {
 	try {
 		await signOut(auth);
-		resetCookieWhenLogout();
+		handleResetBackup();
 		Swal.fire({
 			icon: "success",
 			title: "Đăng xuất thành công",

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import "./main.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCropSimple } from "@fortawesome/free-solid-svg-icons";
@@ -6,7 +6,7 @@ import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible }) {
+function CropImage({ src, fixedWidth, setStorage, setVisible }) {
 	const [crop, setCrop] = useState();
 	const imgRef = useRef(null);
 
@@ -57,13 +57,9 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 	};
 
 	const handleImageLoad = (e) => {
-		console.log("loaded");
-		
 		if (crop) return; 
-		console.log("loaded CROP");
-		
-		const { width, height } = e.target;
-		const widthGreater = width > height,
+		const { width, height } = e.target;		
+		const widthGreater = width >= height,
 			minSize = Math.min(width, height),
 			initialWidth = widthGreater ? minSize * (11 / 16) : minSize,
 			initialHeight = widthGreater ? minSize : minSize * (16 / 11),
@@ -81,13 +77,12 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 	useLayoutEffect(() => {
 		const cookie = Cookies.get("CropImage-state--crop");
 		if (cookie) {
-			console.log(cookie);
 			setCrop(JSON.parse(cookie));
 		}
 	}, []);
 
 	return (
-		visible && (
+
 			<div className="comp-cropImage">
 				<div className="comp-cropImage__block">
 					<h1>
@@ -109,7 +104,7 @@ function CropImage({ src, fixedWidth, setStorage, visible = false, setVisible })
 					</div>
 				</div>
 			</div>
-		)
+		
 	);
 }
 
