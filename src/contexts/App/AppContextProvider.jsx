@@ -30,7 +30,7 @@ const AppContextProvider = ({ children }) => {
 		setCrrPage(_crrPage);
 
 		if (preventCookie) return;
-		Cookies.set("crrPage", _crrPage, { expires: (60 / 86400) });
+		Cookies.set("crrPage", _crrPage, { expires: (1 / 1440) });
 	};
 
 	const updateUserData = (newData) => {
@@ -51,7 +51,7 @@ const AppContextProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
-		const fetchUserData = async () => {
+		const fetchUserData = async () => {		
 			const user = auth.currentUser;
 			if (user) {
 				const UID = user.uid;

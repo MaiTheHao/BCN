@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import useAppContext from "../../contexts/App/useAppContext";
-import Swal from "sweetalert2";
 import "./ExportInformation.scss";
 import ProfilePreview from "../../components/ProfilePreview/ProfilePreview";
 import handleDownloadProfilePic from "../../components/handle/DownloadProfilePic";
-import { faCaretDown, faFileCsv } from "@fortawesome/free-solid-svg-icons";
+import { faFileCsv } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import handleDownloadProfileCSV from "../../components/handle/DownloadProfileCSV";
 
@@ -13,26 +12,15 @@ function ExportInformation() {
 	const formRef = useRef(null);
 	const downloadPicButtonRef = useRef(null);
 	const downloadCsvButtonRef = useRef(null);
-	const [exportFormat, setExportFormat] = useState("png");
 
 	const name = userData?.name || "...";
 	const className = userData?.className || "Không";
 	const khoa = userData?.khoa || "Không";
 	const profilePic = userData?.profilePic || null;
 
-	useEffect(() => {
-		if (!name && !className && !khoa && !profilePic) {
-			Swal.fire({
-				icon: "warning",
-				title: "Thông báo",
-				text: "Bạn chưa cập nhật thông tin cá nhân, hãy cập nhật.",
-			});
-		}
-	}, [name, className, khoa, profilePic]);
-
 	const handleDownloadPic = async () => {
 		downloadPicButtonRef.current.disabled = true;
-		await handleDownloadProfilePic(formRef, `${name}-${khoa}-${khoa}`, exportFormat);
+		await handleDownloadProfilePic(formRef, `${name}-${khoa}-${khoa}`);
 		downloadPicButtonRef.current.disabled = false;
 	};
 
@@ -45,7 +33,7 @@ function ExportInformation() {
 	return (
 		<div className="export-pic">
 			<h1>Thông tin của bạn</h1>
-			<ProfilePreview ref={formRef} name={name} className={className} khoa={khoa} profilePic={profilePic} />
+			<ProfilePreview ref={formRef} name={name} className={className} khoa={khoa} profilePic={profilePic} width={"80vw"} />
 			<div id="download-profile-buttons" className="export-pic__download">
 				<div className="export-pic__download__content">
 					<button

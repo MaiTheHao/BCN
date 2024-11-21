@@ -1,14 +1,11 @@
-function handleDownloadProfileCSV(
-	{ UID = "", Ho_va_Ten = "", Khoa = "", Lop_danh_nghia = "", Profile_pic_base64 = "" },
-	fileName = "profile-csv"
-) {
+function handleDownloadProfileCSV(userData, fileName = "profile-csv") {
 	const users = {
-		UID,
-		Ho_va_Ten,
-		Khoa,
-		Lop_danh_nghia,
-		Profile_pic_base64,
+		Ho_va_Ten: userData?.name,
+		Chuyen_nganh: userData?.khoa,
+		Lop_danh_nghia: userData?.className,
+		Profile_pic: userData?.profilePic,
 	};
+
 	const headers = Object.keys(users).join(",");
 	const rows = Object.values(users).join(",");
 	const csv = `${headers}\n${rows}`;
@@ -24,13 +21,12 @@ function handleDownloadProfileCSV(
 function handleDownloadProfileCSVs(listusers, fileName = "profile-csv") {
 	const users = listusers.map((user) => {
 		const userData = {
-			UID: user.UID,
-			Ho_va_Ten: user.name,
-			Khoa: user.khoa,
-			Lop_danh_nghia: user.className,
-			Profile_pic_base64: user.profilePic,
+			Ho_va_Ten: user?.name,
+			Chuyen_nganh: user?.khoa,
+			Lop_danh_nghia: user?.className,
+			Profile_pic: user?.profilePic,
 		};
-        return userData;
+		return userData;
 	});
 
 	const headers = Object.keys(users[0]).join(",");

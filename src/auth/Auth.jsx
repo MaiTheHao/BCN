@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { auth } from "../FB/db";
 import { onAuthStateChanged } from "firebase/auth";
 import Loading from "../components/Loading/Loading";
@@ -9,22 +9,19 @@ import Login from "../pages/Login/Login";
 function Auth() {
 	const { appContext, handleSetAuth } = useAppContext();
 	const [isLoading, setIsLoading] = useState(true);
-	const handleOnAuthStateChange = () => {
+
+	useLayoutEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setIsLoading(true);
 			if (user && user?.emailVerified) {
 				handleSetAuth(true, true, user);
-				setIsLoading(false);
 			} else {
 				handleSetAuth(undefined, undefined, undefined);
-				setIsLoading(false);
 			}
+			setIsLoading(false);
 		});
-		return () => unsubscribe();
-	};
 
-	useEffect(() => {
-		handleOnAuthStateChange();
+		return () => unsubscribe();
 	}, []);
 
 	return <>{isLoading ? <Loading /> : appContext.isLogged && appContext.isAuth ? <Outlet /> : <Login />}</>;

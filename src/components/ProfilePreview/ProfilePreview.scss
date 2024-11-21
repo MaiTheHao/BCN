@@ -1,73 +1,66 @@
-$color-text: rgb(45, 45, 45);
-$color-text-shadow: transparent;
-$color-background: #ffffff;
-$color-border: #f8f8f8;
-
 .info-preview {
-	user-select: none;
+	// IMPORTANT 21/11 ( w / h ) - base scaleSize
+	// FONT-SIZE 85/2 ( w / s ) - base scaleSize
+	// width: 850px;
+	// height: calc(11/21 * 850px);
+	// font-size: calc((2/85 * 850px)); 
+	// IMPORTANT
+
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: flex-start;
-	overflow: hidden;
-	font-size: min(1.2vw, 17.28px);
-	background-color: $color-background;
-    border: 0.3em solid $color-border;
-	border-radius: 0.25em;
-	padding: 1.25em 4em;
-	margin-bottom: 1.25em;
-	gap: 1em;
+	
+
+	padding: 1em 0;
+
+	border: .05em solid #000000;
+	background-color: rgb(255, 255, 255);
 
 	&-top {
-		p {
-			font-size: 0.8em;
-			font-weight: 200;
-            color: $color-text;
-		}
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: .2em;
+		font-size: 1em;
 
-		h2 {
-			font-size: 0.9em;
-            color: $color-text;
+		p{
+			font-size: .9em;
 		}
-
-		h1 {
+		h2{
+			font-size: 1em;
+		}
+		h1{
 			font-size: 1.2em;
-			margin-top: 0.5em;
-            color: $color-text;
-		}
-
-		* {
-			text-align: center;
-			text-wrap: nowrap;
+			text-decoration: underline;
 		}
 	}
 
 	&-body {
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
 		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 10%;
+		font-size: 1em;
 
 		&__profilePic {
 			position: relative;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			width: 19.378%;
-			height: min(calc(55.5vw / 100px * 23.913px), 191.11px);
+			width: calc(11em / 2);
+			height: calc(16em / 2);
 			overflow: hidden;
-            background-color: $color-border;
-            padding: 0.2em;
-            border-radius: 0.3em;
+			padding: 0.2em;
+			border-radius: 0.3em;
 			z-index: 1;
 
 			img {
 				z-index: 0;
 				width: 100%;
 				height: 100%;
-				object-fit: cover;
+				object-fit: fill;
 				pointer-events: none;
-                border-radius: 0.1em;
 			}
 		}
 
@@ -79,10 +72,10 @@ $color-border: #f8f8f8;
 			width: max-content;
 			height: max-content;
 
+			font-size: .9em;
+
 			.name {
 				font-size: 1.3em;
-				color: $color-text;
-				text-shadow: 0.05em 0.05em $color-text-shadow;
 				font-weight: 800;
 				text-transform: uppercase;
 			}
@@ -90,42 +83,11 @@ $color-border: #f8f8f8;
 			.class,
 			.chuyennganh {
 				text-transform: uppercase;
-                color: $color-text;
 			}
 
 			.chuyennganh {
 				text-transform: capitalize;
 			}
 		}
-	}
-}
-
-.small-preview {
-	width: 55.5vw;
-	max-width: 799.2px;
-	height: 25.57vw;
-	max-height: 368.208px;
-}
-
-.draggable-handle {
-	cursor: move;
-}
-
-@media (max-width: 900px) {
-	.info-preview {
-		font-size: 1.74vw !important;
-	}
-
-	.small-preview {
-		width: 80vw;
-		height: 38.26vw;
-	}
-
-	.info-form__buttons {
-		font-size: 0.9em;
-	}
-
-	.info-preview-body__profilePic {
-		height: calc(80vw / 100px * 23.913px) !important;
 	}
 }

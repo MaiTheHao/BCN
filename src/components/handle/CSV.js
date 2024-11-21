@@ -18,7 +18,7 @@ class CSV {
 	}
 
 	parserUserData(line) {
-		let data = line.split(",", 4);
+		let data = line.split(",", 3);
 		data.push(line.slice(line.indexOf("data:image/")));
 		return data;
 	}

@@ -1,6 +1,7 @@
 import { auth } from "./db";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendEmailVerification } from "firebase/auth";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const signIn = async (email, password) => {
 	try {
@@ -44,13 +45,20 @@ const signUp = async (email, password) => {
 	}
 };
 
+const resetCookieWhenLogout = () => {
+	Cookies.remove("crrPage");
+	Cookies.remove("userUpdatingData");
+}
+
 const logout = async () => {
 	try {
 		await signOut(auth);
+		resetCookieWhenLogout();
 		Swal.fire({
 			icon: "success",
 			title: "Đăng xuất thành công",
-		});
+			text: "Hẹn gặp lại bạn",
+		})
 		return true;
 	} catch (error) {
 		const text = "Đã có lỗi xảy ra";
