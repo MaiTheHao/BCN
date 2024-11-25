@@ -1,10 +1,16 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { useLayoutEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Auth from "./auth/Auth";
 import AppContextProvider from "./contexts/App/AppContextProvider";
 import pages, { adminPages } from "./pages";
+import { handleResetCookie } from "./FB/handleLoginAction";
 
 function App() {
+
+	useLayoutEffect(() => {
+		handleResetCookie("web-current-page");
+	}, [])
+
 	return (
 		<AppContextProvider>
 			<BrowserRouter>

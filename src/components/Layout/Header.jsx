@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import webIcon from "../../assets/pics/webIcon.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import { logout } from "../../FB/handleLoginAction";
@@ -13,6 +13,13 @@ const mountWith = {
 
 const NavMenu = () => {
 	const { crrPage, handleSetCrrPage, userRole } = useAppContext();
+	const [activePage, setActivePage] = useState(crrPage);
+
+	const handleClick = (path, isAdmin = false) => {
+		handleSetCrrPage(path, isAdmin);
+		setActivePage(path);
+	};
+
 	return (
 		<ul>
 			{pages
@@ -21,8 +28,8 @@ const NavMenu = () => {
 					<li key={index}>
 						<Link
 							to={`/${item.path}`}
-							className={crrPage === item.path ? "active" : ""}
-							onClick={() => handleSetCrrPage(item.path)}
+							className={activePage === item.path ? "active" : ""}
+							onClick={() => handleClick(item.path)}
 						>
 							{item.name}
 						</Link>
@@ -34,8 +41,8 @@ const NavMenu = () => {
 					<li key={index}>
 						<Link
 							to={`/${item.path}`}
-							className={crrPage === item.path ? "active" : ""}
-							onClick={() => handleSetCrrPage(item.path, true)}
+							className={activePage === item.path ? "active" : ""}
+							onClick={() => handleClick(item.path, true)}
 						>
 							{item.name}
 						</Link>

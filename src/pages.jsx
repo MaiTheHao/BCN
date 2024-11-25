@@ -27,7 +27,7 @@ const pages = [
 	},
 	{
 		path: "*",
-		component: <Navigate to={Cookies.get("crrPage") || "xuat-thong-tin"} />,
+		component: <Navigate to={Cookies.get("web-current-page") || "xuat-thong-tin"} />,
 	},
 ];
 

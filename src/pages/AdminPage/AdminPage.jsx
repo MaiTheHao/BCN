@@ -2,8 +2,8 @@ import React from "react";
 import "./main.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPointer, faList, faPen } from "@fortawesome/free-solid-svg-icons";
-import { Link, Route, Routes } from "react-router-dom";
-import Statistics from "./pages/Statistics";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
+import Statistics from "./pages/Statistics/Statistics";
 import Draggable from "react-draggable";
 
 const sidebarItems = [
@@ -32,7 +32,7 @@ function AdminPage() {
 					<div className="sidebar-content">
 						<ul>
 							<li id="dragHandle" style={{ cursor: "move" }}>
-							<FontAwesomeIcon icon={faHandPointer} />
+								<FontAwesomeIcon icon={faHandPointer} />
 							</li>
 							{sidebarItems.map((item, index) => (
 								<Link key={index} to={item?.href}>
@@ -46,9 +46,8 @@ function AdminPage() {
 			</Draggable>
 			<div className="content">
 				<Routes>
-					{sidebarItems.map(({ href, Comp }, index) => (
-						Comp && <Route key={index} path={href} element={<Comp/>} />
-					))}
+					{sidebarItems.map(({ href, Comp }, index) => Comp && <Route key={index} path={href} element={<Comp />} />)}
+					<Route path="*" element={<Navigate to="statistics" />} />
 				</Routes>
 			</div>
 		</div>

@@ -5,18 +5,17 @@ import "./main.scss";
 import { getIdTokenResult } from "firebase/auth";
 import { auth } from "../../FB/db";
 import { Navigate } from "react-router-dom";
-import useAppContext from "../../contexts/App/useAppContext";
+import Loading from "../Loading/Loading";
 
 function LayoutAdmin({ children }) {
-	const { userRole } = useAppContext();
-	const [ccRole, setCrrRole] = useState("");
+	const [userRole, setUserRole] = useState("");
 	const [isLoad, setIsLoad] = useState(true);
 
 	const fetchUserRole = async () => {
 		setIsLoad(true);
 		const idTokenResult = await getIdTokenResult(auth.currentUser);
 		const userClaims = idTokenResult.claims;
-		setCrrRole(userClaims.role);
+		setUserRole(userClaims.role);
 		setIsLoad(false);
 	};
 
@@ -25,16 +24,16 @@ function LayoutAdmin({ children }) {
 	}, []);
 
 	return !isLoad ? (
-		userRole === "admin" && ccRole === "admin" ? (
+		userRole === "admin" ? (
 			<div>
 				<Header className="webHeader webPart adminLayout" />
 				<main className="webBody webPart adminLayout">{children}</main>
 				<Footer className="webFooter webPart adminLayout" />
 			</div>
 		) : (
-			<Navigate to="/xuat-anh" replace />
+			<Navigate to="/undefine-page" replace />
 		)
-	) : null;
+	) : <Loading/>;
 }
 
 export default LayoutAdmin;

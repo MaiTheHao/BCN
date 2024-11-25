@@ -3,9 +3,13 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, se
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
+const handleResetCookie = (name) => {
+	Cookies.remove(name);
+}
+
 const handleResetBackup = () => {
 	localStorage.removeItem("UpdateInformation-state--state");
-	Cookies.remove("crrPage");
+	Cookies.remove("web-current-page");
 	Cookies.remove("userUpdatingData");
 }
 
@@ -74,4 +78,4 @@ const logout = async () => {
 	}
 };
 
-export { signIn, signUp, logout };
+export { signIn, signUp, logout, handleResetCookie};

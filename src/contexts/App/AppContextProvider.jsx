@@ -13,7 +13,7 @@ const initAppContext = {
 
 const AppContextProvider = ({ children }) => {
 	const [appContext, setAppContext] = useState({ ...initAppContext, screenW: window.innerWidth, screenH: window.innerHeight });
-	const [crrPage, setCrrPage] = useState(Cookies.get("crrPage") || "xuat-anh");
+	const [crrPage, setCrrPage] = useState(Cookies.get("web-current-page") || "xuat-thong-tin");
 	const [userData, setUserData] = useState({});
 	const [userRole, setUserRole] = useState("");
 
@@ -28,9 +28,8 @@ const AppContextProvider = ({ children }) => {
 
 	const handleSetCrrPage = (_crrPage, preventCookie = false) => {
 		setCrrPage(_crrPage);
-
 		if (preventCookie) return;
-		Cookies.set("crrPage", _crrPage, { expires: (1 / 1440) });
+		Cookies.set("web-current-page", _crrPage, { expires: (5 / 1440) });
 	};
 
 	const updateUserData = (newData) => {
