@@ -17,28 +17,34 @@ import InputFileField from "./Components/InputFileField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const initialState = {
+	chuyen_nganh: "",
+	khoa: "",
+	lop: "",
 	name: "",
 	className: "",
-	khoa: "",
 	profilePic: null,
 	profilePicUploaded: null,
 };
 
-const listChuyenNganhOptions = data.chuyen_nganh;
-const listLopOptions = data.lop;
+const listChuyenNganhOptions = Object.keys(data.chuyen_nganh);
 
 function reducer(state, action) {
 	switch (action.type) {
 		case "SET_NAME":
-			return { ...state, name: action?.payload };
-		case "SET_CLASS_NAME":
-			return { ...state, className: action?.payload };
+			return { ...state, name: action.payload };
 		case "SET_CHUYEN_NGANH":
-			return { ...state, khoa: action?.payload };
+			return { ...state, chuyen_nganh: action.payload, className: data.chuyen_nganh[action.payload] };
+		case "SET_KHOA":
+			return { ...state, khoa: action.payload && /^[1-9][0-9]{0,1}$/.test(action.payload) ? action.payload : "" };
+		case "SET_LOP":
+			return {
+				...state,
+				lop: action.payload && /^[a-zA-Z]+$/.test(action.payload.trim()) ? action.payload.trim()[0].toUpperCase() : "",
+			};
 		case "SET_PROFILE_PIC":
-			return { ...state, profilePic: action?.payload };
+			return { ...state, profilePic: action.payload };
 		case "SET_PROFILE_PIC_UPLOADED":
-			return { ...state, profilePicUploaded: action?.payload };
+			return { ...state, profilePicUploaded: action.payload };
 		default:
 			return state;
 	}
@@ -52,29 +58,24 @@ function UpdateInformation() {
 	const [isFectData, setIsFectData] = useState(false);
 	const [isAsync, setIsAsync] = useState(true);
 	const profileRef = useRef(null);
-	const [profileSize, setProfileSize] = useState({ width: 0, height: 0 });
 
-	const handleProfilePicChange = async (e) => {
+	const handleFileChange = async (e, type) => {
 		if (e.target.files && e.target.files[0]) {
-			const myIMG = new IMG(e.target.files[0]);
-			await myIMG.readFilePromise;
-			Cookies.remove("CropImage-state--crop");
-			dispatch({ type: "SET_PROFILE_PIC", payload: myIMG.IMGDataUrl });
-			dispatch({ type: "SET_PROFILE_PIC_UPLOADED", payload: myIMG.IMGDataUrl });
-			setCropVisible(true);
-		}
-	};
-
-	const handleProfileCsvChange = async (e) => {
-		if (e.target.files && e.target.files[0]) {
-			const myCSV = new CSV(e.target.files[0]);
-			await myCSV.readFilePromise;
-			const data = myCSV.readSingleUserData();
-
-			dispatch({ type: "SET_NAME", payload: data[0] });
-			dispatch({ type: "SET_CHUYEN_NGANH", payload: data[1] });
-			dispatch({ type: "SET_CLASS_NAME", payload: data[2] });
-			dispatch({ type: "SET_PROFILE_PIC", payload: data[3] });
+			const file = e.target.files[0];
+			const handler = type === "IMG" ? new IMG(file) : new CSV(file);
+			await handler.readFilePromise;
+			if (type === "IMG") {
+				Cookies.remove("CropImage-state--crop");
+				dispatch({ type: "SET_PROFILE_PIC", payload: handler.IMGDataUrl });
+				dispatch({ type: "SET_PROFILE_PIC_UPLOADED", payload: handler.IMGDataUrl });
+				setCropVisible(true);
+			} else {
+				const data = handler.readSingleUserData();
+				dispatch({ type: "SET_NAME", payload: data[0] });
+				dispatch({ type: "SET_CHUYEN_NGANH", payload: data[1] });
+				dispatch({ type: "SET_CLASS_NAME", payload: data[2] });
+				dispatch({ type: "SET_PROFILE_PIC", payload: data[3] });
+			}
 		}
 	};
 
@@ -86,16 +87,18 @@ function UpdateInformation() {
 
 	const handleUploadData = async () => {
 		const curData = {
-			name: state?.name,
-			className: state?.className,
-			khoa: state?.khoa,
-			profilePic: state?.profilePic,
+			name: state.name,
+			khoa: state.khoa,
+			lop: state.lop,
+			className: state.className,
+			chuyen_nganh: state.chuyen_nganh,
+			profilePic: state.profilePic,
 		};
 
 		setIsUploading(true);
 		try {
 			const UID = auth.currentUser.uid;
-			const docRef = await setDoc(doc(db, "userInformation", UID), curData);
+			await setDoc(doc(db, "userInformation", UID), curData);
 			updateUserData(curData);
 			setIsAsync(true);
 		} catch (error) {
@@ -109,37 +112,43 @@ function UpdateInformation() {
 	};
 
 	const handleAsyncData = () => {
-		const { name, className, khoa, profilePic } = JSON.parse(localStorage.getItem("UpdateInformation-state--state") || "{}");
+		const { name, className, chuyen_nganh, profilePic, lop, khoa } = JSON.parse(
+			localStorage.getItem("UpdateInformation-state--state") || "{}"
+		);
 
-		if (!(name || className || khoa || profilePic)) {
+		if (!(name || className || chuyen_nganh || profilePic || lop || khoa)) {
 			dispatch({ type: "SET_NAME", payload: userData?.name || "" });
 			dispatch({ type: "SET_CLASS_NAME", payload: userData?.className || "" });
-			dispatch({ type: "SET_CHUYEN_NGANH", payload: userData?.khoa || "" });
+			dispatch({ type: "SET_CHUYEN_NGANH", payload: userData?.chuyen_nganh || "" });
 			dispatch({ type: "SET_PROFILE_PIC", payload: userData?.profilePic || null });
 			dispatch({ type: "SET_PROFILE_PIC_UPLOADED", payload: userData?.profilePic || null });
+			dispatch({ type: "SET_LOP", payload: userData?.lop || "" });
+			dispatch({ type: "SET_KHOA", payload: userData?.khoa || "" });
 		} else {
 			dispatch({ type: "SET_NAME", payload: name });
 			dispatch({ type: "SET_CLASS_NAME", payload: className });
-			dispatch({ type: "SET_CHUYEN_NGANH", payload: khoa });
+			dispatch({ type: "SET_CHUYEN_NGANH", payload: chuyen_nganh });
 			dispatch({ type: "SET_PROFILE_PIC", payload: profilePic });
 			dispatch({ type: "SET_PROFILE_PIC_UPLOADED", payload: profilePic });
+			dispatch({ type: "SET_LOP", payload: lop });
+			dispatch({ type: "SET_KHOA", payload: khoa });
 		}
 	};
 
-	// ASYNC TỪ COOKIE
 	useLayoutEffect(() => {
 		handleAsyncData();
 		setIsFectData(true);
 	}, [userData]);
 
-	// BACKUP VÀO COOKIE (1 min)
 	useEffect(() => {
 		const isDataChanged = (state, userData) => {
 			if (
 				state.name?.trim() !== (userData?.name ?? "").trim() ||
 				state.className?.trim() !== (userData?.className ?? "").trim() ||
-				state.khoa?.trim() !== (userData?.khoa ?? "").trim() ||
-				state.profilePic !== (userData?.profilePic ?? null)
+				state.chuyen_nganh?.trim() !== (userData?.chuyen_nganh ?? "").trim() ||
+				state.profilePic !== (userData?.profilePic ?? null) ||
+				state.lop?.trim() !== (userData?.lop ?? "").trim() ||
+				state.khoa?.trim() !== (userData?.khoa ?? "").trim()
 			) {
 				return true;
 			}
@@ -155,19 +164,12 @@ function UpdateInformation() {
 		}
 	}, [state]);
 
-	useLayoutEffect(() => {
-		if (profileRef.current) {
-			const { offsetWidth, offsetHeight } = profileRef.current;
-			setProfileSize({ width: offsetWidth, height: offsetHeight });
-		}
-	}, [profileRef.current]);
-
 	return (
 		<>
 			{cropVisible ? (
 				<CropImage
-					src={state?.profilePicUploaded}
-					fixedWidth={Math.min(Math.max(170, appContext?.screenW * (5 / 28)), 250)}
+					src={state.profilePicUploaded}
+					fixedWidth={Math.min(Math.max(170, appContext.screenW * (5 / 28)), 250)}
 					setStorage={handleCropPicture}
 					visible={cropVisible}
 					setVisible={setCropVisible}
@@ -175,47 +177,55 @@ function UpdateInformation() {
 			) : (
 				<div className="update-information">
 					<div className="update-information__part update-information__form">
-						<form action="">
+						<form>
 							<InputField
 								title="Họ và tên"
 								type="text"
 								id="user-name"
 								name="name"
 								placeholder="Nhập tên của bạn"
-								value={state?.name}
+								value={state.name}
 								onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
 							/>
 							<InputSelectField
 								title="Chuyên ngành"
-								id="user-khoa"
+								id="user-chuyen_nganh"
 								Faicon={faCaretDown}
 								listOptions={listChuyenNganhOptions}
 								placeholder="Nhập chuyên ngành"
-								defaultValue={state?.khoa}
+								defaultValue={state.chuyen_nganh}
 								handleSetData={(value) => dispatch({ type: "SET_CHUYEN_NGANH", payload: value })}
 							/>
-							<InputSelectField
-								title="Lớp"
-								id="user-className"
-								Faicon={faCaretDown}
-								listOptions={listLopOptions}
-								placeholder="Nhập lớp"
-								defaultValue={state?.className}
-								handleSetData={(value) => dispatch({ type: "SET_CLASS_NAME", payload: value })}
-							/>
+							<div className="form__nested__input">
+								<InputField
+									title="Khóa"
+									type="number"
+									id="user-khoa"
+									name="khoa"
+									placeholder="Nhập khóa của bạn (VD: 19, 20, ...)"
+									value={state.khoa}
+									onChange={(e) => dispatch({ type: "SET_KHOA", payload: e.target.value })}
+								/>
+								<InputField
+									title="Lớp"
+									id="user-className"
+									placeholder="Nhập lớp (VD: A, B, C, D, ...)"
+									value={state.lop}
+									onChange={(e) => dispatch({ type: "SET_LOP", payload: e.target.value })}
+								/>
+							</div>
 							<InputFileField
 								id="user-profile-pic"
 								title="Chọn ảnh đại diện"
 								customAccept="image/png, image/jpg, image/jpeg"
-								handle={handleProfilePicChange}
+								handle={(e) => handleFileChange(e, "IMG")}
 							/>
 							<span className="update-information__form__breakLine">------ Hoặc ------</span>
-
 							<InputFileField
 								id="user-profile-csv"
 								title="Nhập file CSV"
 								customAccept=".csv, .xlsx"
-								handle={handleProfileCsvChange}
+								handle={(e) => handleFileChange(e, "CSV")}
 							/>
 						</form>
 					</div>

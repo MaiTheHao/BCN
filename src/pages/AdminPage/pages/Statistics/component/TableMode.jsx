@@ -16,8 +16,8 @@ function TableMode({filteredUsers}) {
 					<tr key={user.name + index}>
 						<td className="stt">{index + 1}</td>
 						<td>{user?.name}</td>
-						<td>{user?.khoa?.toUpperCase()}</td>
-						<td>{user?.className}</td>
+						<td>{user?.chuyen_nganh?.toUpperCase()}</td>
+						<td>{user?.className + user?.khoa + user?.lop}</td>
 					</tr>
 				))}
 			</tbody>

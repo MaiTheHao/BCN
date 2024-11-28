@@ -16,24 +16,35 @@ function ExportInformation() {
 	const name = userData?.name;
 	const className = userData?.className;
 	const khoa = userData?.khoa;
+	const lop = userData?.lop;
+	const chuyen_nganh = userData?.chuyen_nganh;
 	const profilePic = userData?.profilePic || null;
 
 	const handleDownloadPic = async () => {
 		downloadPicButtonRef.current.disabled = true;
-		await handleDownloadProfilePic(formRef, `${name}-${khoa}-${khoa}`);
+		await handleDownloadProfilePic(formRef, `${name}-${chuyen_nganh}-${khoa}`);
 		downloadPicButtonRef.current.disabled = false;
 	};
 
 	const handleDownloadCsv = () => {
 		downloadCsvButtonRef.current.disabled = true;
-		handleDownloadProfileCSV(userData, `${name}-${khoa}-${khoa}`);
+		handleDownloadProfileCSV(userData, `${name}-${chuyen_nganh}-${khoa}`);
 		downloadCsvButtonRef.current.disabled = false;
 	};
 
 	return (
 		<div className="export-pic">
 			<h1>Thông tin của bạn</h1>
-			<ProfilePreview ref={formRef} name={name} className={className} khoa={khoa} profilePic={profilePic} width={"80vw"} />
+			<ProfilePreview
+				ref={formRef}
+				name={name}
+				className={className}
+				khoa={khoa}
+				lop={lop}
+				chuyen_nganh={chuyen_nganh}
+				profilePic={profilePic}
+				width={"80vw"}
+			/>
 			<div id="download-profile-buttons" className="export-pic__download">
 				<div className="export-pic__download__content">
 					<button

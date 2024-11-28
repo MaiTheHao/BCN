@@ -24,9 +24,6 @@ function App() {
 							return <Route key={index} path={page.path} element={page.component} />;
 						})}
 					</Route>
-					{/* <Route path="*" element = {
-						<Test/>
-					}></Route> */}
 				</Routes>
 			</BrowserRouter>
 		</AppContextProvider>

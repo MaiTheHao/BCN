@@ -1,0 +1,15 @@
+LoginContextProvider là một component cung cấp ngữ cảnh đăng nhập cho ứng dụng.
+
+Các thuộc tính của LoginContextProvider:
+- children: Các component con sẽ được bao bọc bởi LoginContextProvider.
+
+Các state trong LoginContextProvider:
+- crrPage: Trang hiện tại ("signin" hoặc "signup").
+- inputValue: Giá trị của các input.
+- isFetchAuth: Trạng thái đang fetch dữ liệu xác thực.
+- errors: Các lỗi xác thực.
+
+Các hàm trong LoginContextProvider:
+- handleInputChange: Xử lý thay đổi giá trị của các input.
+- handleFormSubmit: Xử lý gửi form đăng nhập/đăng ký.
+- changePage: Thay đổi trang giữa đăng nhập và đăng ký.

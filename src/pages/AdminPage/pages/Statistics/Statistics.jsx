@@ -32,12 +32,11 @@ const pagnigationReducer = (state, action) => {
 	}
 };
 
-
 function Statistics() {
 	const [pagnigation, dispatch] = useReducer(pagnigationReducer, {
 		page: 1,
-		maxPerPage: 15,
-		limitPerFetch: 100,
+		maxPerPage: 20,
+		limitPerFetch: 200,
 		realTotalUser: 0,
 		maxPage: 0,
 	});
@@ -73,7 +72,16 @@ function Statistics() {
 	};
 
 	const filteredUsers = useMemo(() => {
-		const raw_data = users.filter((user) => user[filter]?.toLowerCase().includes(searchTerm.toLowerCase()));
+		const raw_data = users.filter((user) => {
+			if (filter === "className") {
+				return (
+					user.className?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					user.khoa?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					user.lop?.toLowerCase().includes(searchTerm.toLowerCase())
+				);
+			}
+			return user[filter]?.toLowerCase().includes(searchTerm.toLowerCase());
+		});
 		const res = raw_data.slice((pagnigation.page - 1) * pagnigation.maxPerPage, pagnigation.page * pagnigation.maxPerPage);
 		return res;
 	}, [users, filter, searchTerm, pagnigation.page]);
@@ -175,9 +183,9 @@ function Statistics() {
 			{!isLoadUser ? (
 				<div className={`statistics-content ${showMode}`} ref={statisticsContentRef}>
 					{showMode === "text" ? (
-						<TableMode filteredUsers = {filteredUsers}/>
+						<TableMode filteredUsers={filteredUsers} />
 					) : (
-						<ImgMode filteredUsers = {filteredUsers} profileRefs={profileRefs}/>
+						<ImgMode filteredUsers={filteredUsers} profileRefs={profileRefs} />
 					)}
 				</div>
 			) : (

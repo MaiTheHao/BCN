@@ -5,6 +5,12 @@ import Swal from "sweetalert2";
 import { signIn, signUp } from "../../FB/handleLoginAction";
 import useAppContext from "../App/useAppContext";
 
+/**
+ * LoginContextProvider là một component cung cấp ngữ cảnh đăng nhập cho ứng dụng.
+ * @param {Object} props - Các thuộc tính của component.
+ * @param {React.ReactNode} props.children - Các component con sẽ được bao bọc bởi LoginContextProvider.
+ * @returns {JSX.Element} - Trả về một phần tử JSX.
+ */
 const LoginContextProvider = ({ children }) => {
 	const { handleSetAuth } = useAppContext();
 	const [crrPage, setCrrPage] = useState("signin");
@@ -14,7 +20,6 @@ const LoginContextProvider = ({ children }) => {
 	const handleInputChange = (e) => {
 		setInputValue({ ...inputValue, [e.target.name]: e.target.value });
 	};
-
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
 		const validationErrors = crrPage === "signin" ? validateSignin(inputValue) : validateSignup(inputValue);
@@ -49,6 +54,9 @@ const LoginContextProvider = ({ children }) => {
 		setIsFetchAuth(false);
 	};
 
+	/**
+	 * Thay đổi trang giữa đăng nhập và đăng ký.
+	 */
 	const changePage = () => {
 		setCrrPage(crrPage === "signin" ? "signup" : "signin");
 		setInputValue({});
