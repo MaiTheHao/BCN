@@ -1,8 +1,10 @@
 function handleDownloadProfileCSV(userData, fileName = "profile-csv") {
 	const users = {
 		Ho_va_Ten: userData?.name,
-		Chuyen_nganh: userData?.khoa,
+		Chuyen_nganh: userData?.chuyen_nganh,
 		Lop_danh_nghia: userData?.className,
+		khoa: userData?.khoa,
+		lop: userData?.lop,
 		Profile_pic: userData?.profilePic,
 	};
 
@@ -22,8 +24,10 @@ function handleDownloadProfileCSVs(listusers, fileName = "profile-csv") {
 	const users = listusers.map((user) => {
 		const userData = {
 			Ho_va_Ten: user?.name,
-			Chuyen_nganh: user?.khoa,
+			Chuyen_nganh: user?.chuyen_nganh,
 			Lop_danh_nghia: user?.className,
+			khoa: user?.khoa,
+			lop: user?.lop,
 			Profile_pic: user?.profilePic,
 		};
 		return userData;

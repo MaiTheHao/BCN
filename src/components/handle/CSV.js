@@ -1,5 +1,12 @@
 import Swal from "sweetalert2";
-// UID	Ho_va_Ten	Khoa	Lop_danh_nghia	Profile_pic_base64
+/*
+	-Họ và tên
+	-Chuyên ngành
+	-Khóa
+	-Lớp
+	-Lớp danh nghia
+	-Profile pic base64
+*/
 class CSV {
 	constructor(file) {
 		this.file = file;
@@ -18,7 +25,7 @@ class CSV {
 	}
 
 	parserUserData(line) {
-		let data = line.split(",", 3);
+		let data = line.split(",", 5);
 		data.push(line.slice(line.indexOf("data:image/")));
 		return data;
 	}

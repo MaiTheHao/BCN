@@ -74,7 +74,9 @@ function UpdateInformation() {
 				dispatch({ type: "SET_NAME", payload: data[0] });
 				dispatch({ type: "SET_CHUYEN_NGANH", payload: data[1] });
 				dispatch({ type: "SET_CLASS_NAME", payload: data[2] });
-				dispatch({ type: "SET_PROFILE_PIC", payload: data[3] });
+				dispatch({type: "SET_KHOA", payload: data[3]});
+				dispatch({type: "SET_LOP", payload: data[4]});
+				dispatch({ type: "SET_PROFILE_PIC", payload: data[5] });
 			}
 		}
 	};
