@@ -26,7 +26,7 @@ const userRoutes = [
   {
     path: "*",
     component: <Navigate to={"xuat-thong-tin"} />,
-  },
+  }
 ];
 
 export default userRoutes;

@@ -1,19 +1,22 @@
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 
-function PagnigationOptions({ pagnigation, pagnigationDispatch }) {
+function PagnigationOptions({ pagnigation, pagnigationDispatch, onNeedMoreUsers }) {
 	const prevPagnigationBtn = useRef(null);
 	const nextPagnigationBtn = useRef(null);
 
-	const validatePagnigation = (action) => {
+	const validatePagnigation = async (action) => {
 		const isNext = action === "NEXT_PAGE";
 		const isPrev = action === "PREV_PAGE";
 		const isLastPage = pagnigation.page === pagnigation.maxPage;
 		const isFirstPage = pagnigation.page === 1;
 
 		if ((isNext && isLastPage) || (isPrev && isFirstPage)) {
-			if (isNext) nextPagnigationBtn.current.disabled = true;
+			if (isNext) {
+				let needMoreStatus = await onNeedMoreUsers();
+				if (!needMoreStatus) nextPagnigationBtn.current.disabled = true;
+			}
 			if (isPrev) prevPagnigationBtn.current.disabled = true;
 			return false;
 		}
@@ -47,7 +50,7 @@ function PagnigationOptions({ pagnigation, pagnigationDispatch }) {
 	useEffect(() => {
 		validatePagnigation("PREV_PAGE");
 		validatePagnigation("NEXT_PAGE");
-        setProcessBtnClass(pagnigation.page);
+		setProcessBtnClass(pagnigation.page);
 	}, [pagnigation.page, pagnigation.maxPage]);
 
 	return (

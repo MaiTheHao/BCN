@@ -1,5 +1,5 @@
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import React, { useEffect, useMemo, useRef, useState, useReducer } from "react";
+import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
+import React, { useEffect, useMemo, useRef, useState, useReducer, useCallback } from "react";
 import { db } from "../../../../configs/db";
 import { faFileCsv, faFileImage, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,14 +35,15 @@ const pagnigationReducer = (state, action) => {
 function Statistics() {
 	const [pagnigation, dispatch] = useReducer(pagnigationReducer, {
 		page: 1,
-		maxPerPage: 20,
-		limitPerFetch: 200,
+		maxPerPage: 15,
+		limitPerFetch: 15,
 		realTotalUser: 0,
 		maxPage: 0,
 	});
 
 	const [users, setUsers] = useState([]);
 	const [isLoadUser, setIsLoadUser] = useState(false);
+	const [lastDoc, setLastDoc] = useState(null);
 
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filter, setFilter] = useState("name");
@@ -52,24 +53,46 @@ function Statistics() {
 	const statisticsContentRef = useRef(null);
 	const profileRefs = useRef([]);
 
-	const fetchUsers = async () => {
-		const querySnapshot = query(collection(db, "userInformation"), limit(pagnigation?.limitPerFetch), orderBy("name", "asc"));
-		const res = await getDocs(querySnapshot);
-		return res.docs.map((doc) => ({ ...doc.data() }));
-	};
+	const fetchUsers = useCallback(
+		async (lastDoc = null) => {
+			let querySnapshot;
+			if (lastDoc) {
+				querySnapshot = query(collection(db, "userInformation"), startAfter(lastDoc), limit(pagnigation?.limitPerFetch));
+			} else {
+				querySnapshot = query(collection(db, "userInformation"), limit(pagnigation?.limitPerFetch));
+			}
+			const res = await getDocs(querySnapshot);
+			return { users: res.docs.map((doc) => ({ ...doc.data() })), lastDoc: res.docs[res.docs.length - 1] };
+		},
+		[pagnigation?.limitPerFetch]
+	);
 
-	const loadUsers = async (fetchUsersFunc, type) => {
-		setIsLoadUser(true);
-		const data = await fetchUsersFunc();
-		if (type === "new") {
-			setUsers(data);
-			dispatch({ type: "SET_REAL_TOTAL_USER", payload: data.length });
-		} else if (type === "add") {
-			setUsers((prev) => [...prev, ...data]);
-			dispatch({ type: "SET_REAL_TOTAL_USER", payload: data.length + users.length });
-		}
-		setIsLoadUser(false);
-	};
+	const loadUsers = useCallback(
+		async (type) => {
+			setIsLoadUser(true);
+			let result;
+			if (type === "new") {
+				result = await fetchUsers();
+				if (result.users.length !== 0) {
+					setUsers(result.users);
+					setLastDoc(result.lastDoc);
+					dispatch({ type: "SET_REAL_TOTAL_USER", payload: result.users.length });
+				}
+			} else if (type === "add") {
+				result = await fetchUsers(lastDoc);
+				if (result.users.length !== 0) {
+					setUsers((prev) => [...prev, ...result.users]);
+					setLastDoc(result.lastDoc);
+					dispatch({ type: "SET_REAL_TOTAL_USER", payload: result.users.length + users.length });
+				}
+			}
+
+			setIsLoadUser(false);
+			if (result.users.length === 0) return false;
+			return true;
+		},
+		[users, fetchUsers]
+	);
 
 	const filteredUsers = useMemo(() => {
 		const raw_data = users.filter((user) => {
@@ -128,12 +151,16 @@ function Statistics() {
 		}
 	};
 
+	const onNeedMoreUsers = async () => {
+		return await loadUsers("add");
+	};
+
 	useEffect(() => {
 		return () => (profileRefs.current = []);
 	}, [users]);
 
 	useEffect(() => {
-		loadUsers(fetchUsers, "new");
+		loadUsers("new");
 	}, []);
 
 	return (
@@ -191,7 +218,7 @@ function Statistics() {
 			) : (
 				<div className="loading-spinner" />
 			)}
-			<PagnigationOptions pagnigation={pagnigation} pagnigationDispatch={dispatch} />
+			<PagnigationOptions pagnigation={pagnigation} pagnigationDispatch={dispatch} onNeedMoreUsers={onNeedMoreUsers} />
 		</div>
 	);
 }
