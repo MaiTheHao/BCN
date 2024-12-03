@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
 import Cookies from "js-cookie";
-import { db, auth } from "../../FB/db";
+import { db, auth } from "../../configs/db";
 import { doc, getDoc } from "firebase/firestore";
 import { getIdTokenResult } from "firebase/auth";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const initAppContext = {
 	isAuth: false,
@@ -12,12 +14,11 @@ const initAppContext = {
 };
 
 const AppContextProvider = ({ children }) => {
+    const navigator = useNavigate();
     // Khởi tạo state appContext với kích thước màn hình hiện tại
     const [appContext, setAppContext] = useState({ ...initAppContext, screenW: window.innerWidth, screenH: window.innerHeight });
-    // Khởi tạo state crrPage từ cookie hoặc giá trị mặc định
-    const [crrPage, setCrrPage] = useState(Cookies.get("web-current-page") || "xuat-thong-tin");
     // Khởi tạo state userData
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState(null);
     // Khởi tạo state userRole
     const [userRole, setUserRole] = useState("");
 
@@ -29,13 +30,6 @@ const AppContextProvider = ({ children }) => {
             isLogged: _isLogged ?? appContext.isLogged,
             user: _user ?? appContext.user,
         });
-    };
-
-    // Hàm cập nhật trang hiện tại và lưu vào cookie
-    const handleSetCrrPage = (_crrPage, preventCookie = false) => {
-        setCrrPage(_crrPage);
-        if (preventCookie) return;
-        Cookies.set("web-current-page", _crrPage, { expires: (5 / 1440) });
     };
 
     // Hàm cập nhật dữ liệu người dùng
@@ -50,8 +44,6 @@ const AppContextProvider = ({ children }) => {
     const providerValues = {
         appContext,
         handleSetAuth,
-        crrPage,
-        handleSetCrrPage,
         userData,
         userRole,
         updateUserData,
@@ -66,10 +58,20 @@ const AppContextProvider = ({ children }) => {
                 const docRef = doc(db, "userInformation", UID);
                 const res = await getDoc(docRef);
                 if (res.exists()) {
+                    const data = res.data();                    
                     setUserData((prevData) => ({
                         ...prevData,
-                        ...res.data(),
+                        ...data,
                     }));
+                }
+                else
+                {
+                    Swal.fire({
+                        icon: "info",
+                        title: 'Xin hãy cập nhật thông tin cá nhân',
+                        confirmButtonText: 'OK'
+                    })
+                    navigator("cap-nhat-thong-tin")
                 }
 
                 const idTokenResult = await getIdTokenResult(auth.currentUser);

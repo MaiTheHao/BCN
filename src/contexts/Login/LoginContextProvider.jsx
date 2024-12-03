@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { LoginContext } from "./LoginContext";
 import { validateSignin, validateSignup } from "../../pages/Login/components/validateInput";
 import Swal from "sweetalert2";
-import { signIn, signUp } from "../../FB/handleLoginAction";
+import signIn from "../../utilities/user/signIn";
+import signUp from "../../utilities/user/signUp";
 import useAppContext from "../App/useAppContext";
 
 /**
@@ -33,11 +34,6 @@ const LoginContextProvider = ({ children }) => {
 					: await signUp(inputValue.email, inputValue.password);
 			if (res !== undefined) {
 				if (crrPage === "signin") {
-					Swal.fire({
-						icon: "success",
-						title: "Đăng nhập thành công",
-						text: "Chào mừng bạn trở lại",
-					});
 					handleSetAuth(true, true, res);
 				} else {
 					Swal.fire({

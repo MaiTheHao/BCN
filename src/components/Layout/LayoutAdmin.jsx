@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import "./main.scss";
+import "./Layout.scss";
 import { getIdTokenResult } from "firebase/auth";
-import { auth } from "../../FB/db";
+import { auth } from "../../configs/db";
 import { Navigate } from "react-router-dom";
 import Loading from "../Loading/Loading";
 

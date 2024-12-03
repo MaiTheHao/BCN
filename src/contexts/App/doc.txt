@@ -5,13 +5,11 @@
 
 ## Các state
 - `appContext`: Trạng thái ngữ cảnh ứng dụng, bao gồm thông tin xác thực và kích thước màn hình.
-- `crrPage`: Trang hiện tại của ứng dụng, được lưu trữ trong cookie.
 - `userData`: Dữ liệu người dùng.
 - `userRole`: Vai trò của người dùng.
 
 ## Các hàm
 - `handleSetAuth`: Cập nhật thông tin xác thực.
-- `handleSetCrrPage`: Cập nhật trang hiện tại và lưu vào cookie.
 - `updateUserData`: Cập nhật dữ liệu người dùng.
 
 ## useEffect
@@ -21,8 +19,6 @@
 ## Giá trị provider
 - `appContext`
 - `handleSetAuth`
-- `crrPage`
-- `handleSetCrrPage`
 - `userData`
 - `userRole`
 - `updateUserData`

@@ -1,10 +1,10 @@
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState, useReducer } from "react";
-import { db } from "../../../../FB/db";
+import { db } from "../../../../configs/db";
 import { faFileCsv, faFileImage, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toPng } from "html-to-image";
-import { handleDownloadProfileCSVs } from "../../../../components/handle/DownloadProfileCSV";
+import { handleDownloadProfileCSVs } from "../../../../utilities/files/DownloadProfileCSV";
 import PagnigationOptions from "./component/PagnigationOptions";
 import TableMode from "./component/TableMode";
 import ImgMode from "./component/ImgMode";

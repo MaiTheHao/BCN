@@ -1,5 +1,5 @@
 import React from "react";
-import "./main.scss";
+import "./AdminPage.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPointer, faList, faPen } from "@fortawesome/free-solid-svg-icons";
 import { Link, Navigate, Route, Routes } from "react-router-dom";

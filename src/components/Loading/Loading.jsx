@@ -1,7 +1,7 @@
 import React from "react";
 import { faSnowflake } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./main.scss";
+import "./Loading.scss";
 
 function Loading({ message = "Đang tải" }) {
 	return (

@@ -1,27 +1,13 @@
 import Swal from "sweetalert2";
-/*
-	-Họ và tên
-	-Chuyên ngành
-	-Khóa
-	-Lớp
-	-Lớp danh nghia
-	-Profile pic base64
-*/
+import { readFileAsText } from "./fileReaderUtils";
+
 class CSV {
 	constructor(file) {
 		this.file = file;
 		this.listUserData = [];
-		this.readFilePromise = this.readFileCSV()
-			.then((data) => (this.listUserData = data))
+		this.readFilePromise = readFileAsText(this.file)
+			.then((data) => (this.listUserData = data.split("\n").slice(1)))
 			.catch((err) => Swal.fire({ icon: "error", title: "Lỗi!", text: err }));
-	}
-	readFileCSV() {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.onloadend = () => resolve(reader.result.split("\n").slice(1));
-			reader.onerror = () => reject("Đã có lỗi xảy ra khi tải file!");
-			reader.readAsText(this.file);
-		});
 	}
 
 	parserUserData(line) {

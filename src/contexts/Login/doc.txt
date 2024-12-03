@@ -4,7 +4,6 @@ Các thuộc tính của LoginContextProvider:
 - children: Các component con sẽ được bao bọc bởi LoginContextProvider.
 
 Các state trong LoginContextProvider:
-- crrPage: Trang hiện tại ("signin" hoặc "signup").
 - inputValue: Giá trị của các input.
 - isFetchAuth: Trạng thái đang fetch dữ liệu xác thực.
 - errors: Các lỗi xác thực.

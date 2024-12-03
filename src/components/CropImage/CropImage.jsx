@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import "./main.scss";
+import "./CropImage.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCropSimple } from "@fortawesome/free-solid-svg-icons";
 import ReactCrop from "react-image-crop";

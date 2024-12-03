@@ -1,14 +1,14 @@
 import React, { useReducer, useState, useEffect, useLayoutEffect, useRef } from "react";
 import Cookies from "js-cookie";
-import { db, auth } from "../../FB/db";
+import { db, auth } from "../../configs/db";
 import "./UpdateInformation.scss";
 import Swal from "sweetalert2";
 import { doc, setDoc } from "firebase/firestore";
 import useAppContext from "../../contexts/App/useAppContext";
 import ProfilePreview from "../../components/ProfilePreview/ProfilePreview";
 import CropImage from "../../components/CropImage/CropImage";
-import CSV from "../../components/handle/CSV";
-import IMG from "../../components/handle/IMG";
+import CSV from "../../utilities/files/CSV";
+import IMG from "../../utilities/files/IMG";
 import { faCaretDown, faCheck, faSpinner, faXmark } from "@fortawesome/free-solid-svg-icons";
 import data from "./store.json";
 import InputSelectField from "./Components/InputSelectField";

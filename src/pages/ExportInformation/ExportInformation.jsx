@@ -2,10 +2,10 @@ import React, { useRef, useEffect, useState } from "react";
 import useAppContext from "../../contexts/App/useAppContext";
 import "./ExportInformation.scss";
 import ProfilePreview from "../../components/ProfilePreview/ProfilePreview";
-import handleDownloadProfilePic from "../../components/handle/DownloadProfilePic";
+import handleDownloadProfilePic from "../../utilities/files/DownloadProfilePic";
+import handleDownloadProfileCSV from "../../utilities/files/DownloadProfileCSV";
 import { faFileCsv } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import handleDownloadProfileCSV from "../../components/handle/DownloadProfileCSV";
 
 function ExportInformation() {
 	const { userData } = useAppContext();

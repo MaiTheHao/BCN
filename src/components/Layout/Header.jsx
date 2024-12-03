@@ -1,34 +1,28 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import webIcon from "../../assets/pics/webIcon.jpg";
+import webIcon from "../../../public/assets/pics/webIcon.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
-import { logout } from "../../FB/handleLoginAction";
+import logout from "../../utilities/user/logout";
 import useAppContext from "../../contexts/App/useAppContext";
-import pages, { adminPages } from "../../pages";
+import userRoutes from "../../routers/userRoutes";
+import adminRoutes from "../../routers/adminRouters";
 
 const mountWith = {
 	navWrapper: 900,
 };
 
 const NavMenu = () => {
-	const { crrPage, handleSetCrrPage, userRole } = useAppContext();
-	const [activePage, setActivePage] = useState(crrPage);
-
-	const handleClick = (path, isAdmin = false) => {
-		handleSetCrrPage(path, isAdmin);
-		setActivePage(path);
-	};
+	const { userRole } = useAppContext();
 
 	return (
 		<ul>
-			{pages
+			{userRoutes
 				.filter((page) => page.name)
 				.map((item, index) => (
 					<li key={index}>
 						<Link
 							to={`/${item.path}`}
-							className={activePage === item.path ? "active" : ""}
 							onClick={() => handleClick(item.path)}
 						>
 							{item.name}
@@ -37,11 +31,10 @@ const NavMenu = () => {
 				))}
 
 			{userRole === "admin" &&
-				adminPages.map((item, index) => (
+				adminRoutes.map((item, index) => (
 					<li key={index}>
 						<Link
 							to={`/${item.path}`}
-							className={activePage === item.path ? "active" : ""}
 							onClick={() => handleClick(item.path, true)}
 						>
 							{item.name}

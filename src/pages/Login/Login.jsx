@@ -1,6 +1,6 @@
 import React from "react";
 import LoginContextProvider from "../../contexts/Login/LoginContextProvider";
-import "./main.scss";
+import "./Login.scss";
 import AuthForm from "./components/AuthForm";
 
 function Login() {

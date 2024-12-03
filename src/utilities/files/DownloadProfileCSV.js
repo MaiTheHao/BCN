@@ -1,3 +1,5 @@
+import { generateCSV } from "./csvUtils";
+
 function handleDownloadProfileCSV(userData, fileName = "profile-csv") {
 	const users = {
 		Ho_va_Ten: userData?.name,
@@ -8,9 +10,7 @@ function handleDownloadProfileCSV(userData, fileName = "profile-csv") {
 		Profile_pic: userData?.profilePic,
 	};
 
-	const headers = Object.keys(users).join(",");
-	const rows = Object.values(users).join(",");
-	const csv = `${headers}\n${rows}`;
+	const csv = generateCSV([users]);
 	const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
 	const link = document.createElement("a");
 	const url = URL.createObjectURL(blob);
@@ -21,22 +21,16 @@ function handleDownloadProfileCSV(userData, fileName = "profile-csv") {
 }
 
 function handleDownloadProfileCSVs(listusers, fileName = "profile-csv") {
-	const users = listusers.map((user) => {
-		const userData = {
-			Ho_va_Ten: user?.name,
-			Chuyen_nganh: user?.chuyen_nganh,
-			Lop_danh_nghia: user?.className,
-			khoa: user?.khoa,
-			lop: user?.lop,
-			Profile_pic: user?.profilePic,
-		};
-		return userData;
-	});
+	const users = listusers.map((user) => ({
+		Ho_va_Ten: user?.name,
+		Chuyen_nganh: user?.chuyen_nganh,
+		Lop_danh_nghia: user?.className,
+		khoa: user?.khoa,
+		lop: user?.lop,
+		Profile_pic: user?.profilePic,
+	}));
 
-	const headers = Object.keys(users[0]).join(",");
-	const rows = users.map((user) => Object.values(user).join(",")).join("\n");
-
-	const csv = headers + "\n" + rows;
+	const csv = generateCSV(users);
 	const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
 	const link = document.createElement("a");
 	const url = URL.createObjectURL(blob);
