@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import webIcon from "../../../public/assets/pics/webIcon.jpg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import logout from "../../utilities/user/logout";
@@ -12,41 +12,41 @@ const mountWith = {
 	navWrapper: 900,
 };
 
-const NavMenu = () => {
-	const { userRole } = useAppContext();
+const NavMenu = ({ userRole }) => {
+	const userMenuItems = useMemo(() => {
+		return userRoutes
+			.filter((page) => page.name)
+			.map((item, index) => (
+				<li key={index}>
+					<Link to={`/${item.path}`}>
+						{item.name}
+					</Link>
+				</li>
+			));
+	}, []);
+
+	const adminMenuItems = useMemo(() => {
+		return userRole === "admin"
+			? adminRoutes.map((item, index) => (
+					<li key={index}>
+						<Link to={`/${item.path}`}>
+							{item.name}
+						</Link>
+					</li>
+			  ))
+			: [];
+	}, [userRole]);
 
 	return (
 		<ul>
-			{userRoutes
-				.filter((page) => page.name)
-				.map((item, index) => (
-					<li key={index}>
-						<Link
-							to={`/${item.path}`}
-							onClick={() => handleClick(item.path)}
-						>
-							{item.name}
-						</Link>
-					</li>
-				))}
-
-			{userRole === "admin" &&
-				adminRoutes.map((item, index) => (
-					<li key={index}>
-						<Link
-							to={`/${item.path}`}
-							onClick={() => handleClick(item.path, true)}
-						>
-							{item.name}
-						</Link>
-					</li>
-				))}
+			{userMenuItems}
+			{adminMenuItems}
 		</ul>
 	);
 };
 
 function Header({ ...rest }) {
-	const { appContext } = useAppContext();
+	const { appContext, userRole } = useAppContext();
 	const [isShowUserWrapper, setIsShowUserWrapper] = useState(false);
 	const [isShowNavWrapper, setIsShowNavWrapper] = useState(false);
 	const userIconRef = useRef(),
@@ -97,7 +97,7 @@ function Header({ ...rest }) {
 			</div>
 			<div className="webHeader-right">
 				<div className="webHeader-right__nav">
-					<NavMenu />
+					<NavMenu userRole = {userRole}/>
 				</div>
 				{appContext.screenW <= mountWith.navWrapper ? (
 					<div className="webHeader-right__nav--wrapper">
@@ -130,4 +130,4 @@ function Header({ ...rest }) {
 	);
 }
 
-export default Header;
+export default React.memo(Header);

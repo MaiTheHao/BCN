@@ -49,7 +49,7 @@ $padding-large: 1em;
     &__form {
         width: 50%;
         display: flex;
-        form {
+        &__container {
             width: 100%;
             display: flex;
             flex-direction: column;

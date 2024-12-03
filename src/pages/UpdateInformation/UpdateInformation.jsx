@@ -179,7 +179,7 @@ function UpdateInformation() {
 			) : (
 				<div className="update-information">
 					<div className="update-information__part update-information__form">
-						<form>
+						<div className="update-information__form__container">
 							<InputField
 								title="Họ và tên"
 								type="text"
@@ -229,7 +229,7 @@ function UpdateInformation() {
 								customAccept=".csv, .xlsx"
 								handle={(e) => handleFileChange(e, "CSV")}
 							/>
-						</form>
+						</div>
 					</div>
 					<div className="update-information__part update-information__profile" ref={profileRef}>
 						<div className="update-information__profile__content">

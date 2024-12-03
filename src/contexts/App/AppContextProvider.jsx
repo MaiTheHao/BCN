@@ -13,7 +13,7 @@ const initAppContext = {
 	user: undefined,
 };
 
-const AppContextProvider = ({ children }) => {
+const AppContextProvider = ({ children }) => {    
     const navigator = useNavigate();
     // Khởi tạo state appContext với kích thước màn hình hiện tại
     const [appContext, setAppContext] = useState({ ...initAppContext, screenW: window.innerWidth, screenH: window.innerHeight });
