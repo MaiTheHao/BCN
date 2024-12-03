@@ -4,10 +4,10 @@ import Footer from "./Footer";
 import "./Layout.scss";
 import { getIdTokenResult } from "firebase/auth";
 import { auth } from "../../configs/db";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Loading from "../Loading/Loading";
 
-function LayoutAdmin({ children }) {
+function LayoutAdmin() {
 	const [userRole, setUserRole] = useState("");
 	const [isLoad, setIsLoad] = useState(true);
 
@@ -27,7 +27,7 @@ function LayoutAdmin({ children }) {
 		userRole === "admin" ? (
 			<div>
 				<Header className="webHeader webPart adminLayout" />
-				<main className="webBody webPart adminLayout">{children}</main>
+				<main className="webBody webPart adminLayout"><Outlet/></main>
 				<Footer className="webFooter webPart adminLayout" />
 			</div>
 		) : (
