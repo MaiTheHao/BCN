@@ -11,7 +11,6 @@ function Footer({ ...rest }) {
         <h2>Cảm ơn bạn đã sử dụng trang web của chúng tôi</h2>
         <p>Chúng tôi luôn lắng nghe và cải thiện dịch vụ của mình</p>
         <span>Đây là một trang web phi lợi nhuận, phục vụ mục đích của chúng tôi</span>
-        <p>&copy; 2023 Mai The Hao. All rights reserved.</p>
       </div>
       <div className="webFooter__contact">
         <div className="webFooter__contact-element facebook">
