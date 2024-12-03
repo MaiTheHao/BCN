@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../configs/db";
+import CustomFormInput from "./components/CusTomFormInput";
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import FormBtns from "./components/FormBtns";
 
-const PasswordReset = () => {
+const FormForgotPassword = ({changePage}) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -21,22 +24,25 @@ const PasswordReset = () => {
   };
 
   return (
-    <div>
-      <h2>Quên mật khẩu</h2>
-      <form onSubmit={handlePasswordReset}>
-        <input
+    <div className="forgot-password">
+      <form className="forgot-password__form" onSubmit={handlePasswordReset}>
+        <CustomFormInput
+          icon={faEnvelope}
           type="email"
+          name="email"
           placeholder="Nhập email của bạn"
-          value={email}
+          inputValue={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
-        <button type="submit">Gửi yêu cầu</button>
+        <div className="forgot-password__form__btns">
+          <button>Gửi</button>
+          <button type="button" onClick={() => changePage()}>Quay lại</button>
+        </div>
+        {message && <p className="message">{message}</p>}
+        {error && <p className="error">{error}</p>}
       </form>
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
 
-export default PasswordReset;
+export default FormForgotPassword;

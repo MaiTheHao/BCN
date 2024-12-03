@@ -53,8 +53,8 @@ const LoginContextProvider = ({ children }) => {
 	/**
 	 * Thay đổi trang giữa đăng nhập và đăng ký.
 	 */
-	const changePage = () => {
-		setCrrPage(crrPage === "signin" ? "signup" : "signin");
+	const changePage = (page = null) => {
+		setCrrPage(page ? page : crrPage === "signin" ? "signup" : "signin");
 		setInputValue({});
 		setErrors({});
 	};

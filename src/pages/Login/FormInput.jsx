@@ -1,7 +1,7 @@
 import React from "react";
 import CustomFormInput from "./components/CusTomFormInput";
 
-const FormInputs = ({ baseInputs, signupInputs, crrPage, handleInputChange, inputValue, errors }) => {
+const FormInputs = ({ baseInputs, signupInputs, crrPage, handleInputChange, inputValue }) => {
 	const renderInputs = (inputs) => (
 		<>
 			{inputs.map((input, index) => (

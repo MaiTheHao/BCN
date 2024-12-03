@@ -138,4 +138,52 @@
 			padding-bottom: 0.75em;
 		}
 	}
+
+	.forgot-password {
+		&__form {
+			width: clamp(200px, 100vw, 400px);
+			gap: 0.5em;
+
+			&__btns {
+				display: flex;
+				justify-content: space-between;
+				gap: 0.5em;
+
+				button {
+					cursor: pointer;
+					width: 100%;
+					border-radius: 0.2em;
+					padding: 0.2em 0.5em;
+
+					&:first-child {
+						background-color: rgb(64, 255, 0);
+						color: white;
+					}
+
+					&:last-child {
+						background-color: rgb(240, 240, 240);
+						color: rgb(47, 47, 47);
+
+						border: 0.05em solid rgb(200, 200, 200);
+					}
+				}
+			}
+
+			.message {
+				width: 100%;
+				text-wrap: wrap;
+				text-align: center;
+				font-size: 0.8em;
+				color: rgb(0, 128, 0);
+			}
+
+			.error {
+				width: 100%;
+				text-wrap: wrap;
+				text-align: center;
+				font-size: 0.8em;
+				color: rgb(240, 0, 0);
+			}
+		}
+	}
 }
