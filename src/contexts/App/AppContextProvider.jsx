@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
 import Cookies from "js-cookie";
-import { db, auth } from "../../configs/db";
+import { db, auth } from "../../../backend/configs/database";
 import { doc, getDoc } from "firebase/firestore";
 import { getIdTokenResult } from "firebase/auth";
 import Swal from "sweetalert2";

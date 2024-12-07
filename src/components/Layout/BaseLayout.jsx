@@ -1,10 +1,10 @@
 import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-import "./Layout.scss";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import "./BaseLayout.scss";
 import { Outlet } from "react-router-dom";
 
-function Layout() {
+function BaseLayout() {
 	return (
 		<>
 			<Header className="webHeader webPart" />
@@ -14,4 +14,4 @@ function Layout() {
 	);
 }
 
-export default Layout;
+export default BaseLayout;

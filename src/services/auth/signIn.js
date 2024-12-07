@@ -1,7 +1,7 @@
-import { auth } from "../../configs/db";
+import { auth } from "../../../backend/configs/database";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Swal from "sweetalert2";
-import { handleResetBackup } from "./handleResetBackup";
+import { handleResetBackup } from "../../handles/handleResetBackup";
 
 const signIn = async (email, password) => {
 	try {

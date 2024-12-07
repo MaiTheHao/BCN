@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../../configs/db";
+import { auth } from "../../../backend/configs/database";
 import CustomFormInput from "./components/CusTomFormInput";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import FormBtns from "./components/FormBtns";

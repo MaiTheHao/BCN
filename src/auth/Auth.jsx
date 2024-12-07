@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { auth } from "../configs/db";
+import React, { useLayoutEffect, useState } from "react";
+import { auth } from "../../backend/configs/database";
 import { onAuthStateChanged } from "firebase/auth";
 import Loading from "../components/Loading/Loading";
 import useAppContext from "../contexts/App/useAppContext";

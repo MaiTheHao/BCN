@@ -1,6 +1,6 @@
 import React, { useReducer, useState, useEffect, useLayoutEffect, useRef } from "react";
 import Cookies from "js-cookie";
-import { db, auth } from "../../configs/db";
+import { db, auth } from "../../../backend/configs/database";
 import "./UpdateInformation.scss";
 import Swal from "sweetalert2";
 import { doc, setDoc } from "firebase/firestore";

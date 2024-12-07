@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import webIcon from "../../../public/assets/pics/webIcon.jpg";
+import webIcon from "../../assets/pics/webIcon.jpg";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
-import logout from "../../utilities/user/logout";
+import logout from "../../services/auth/logout";
 import useAppContext from "../../contexts/App/useAppContext";
-import userRoutes from "../../routers/userRoutes";
-import adminRoutes from "../../routers/adminRouters";
+import { PrivateRoutes, PublicRoutes } from "../../routers/RouteStore";
 
 const mountWith = {
 	navWrapper: 900,
@@ -14,7 +13,7 @@ const mountWith = {
 
 const NavMenu = ({ userRole }) => {
 	const userMenuItems = useMemo(() => {
-		return userRoutes
+		return PublicRoutes
 			.filter((page) => page.name)
 			.map((item, index) => (
 				<li key={index}>
@@ -27,7 +26,7 @@ const NavMenu = ({ userRole }) => {
 
 	const adminMenuItems = useMemo(() => {
 		return userRole === "admin"
-			? adminRoutes.map((item, index) => (
+			? PrivateRoutes.map((item, index) => (
 					<li key={index}>
 						<Link to={`/${item.path}`}>
 							{item.name}

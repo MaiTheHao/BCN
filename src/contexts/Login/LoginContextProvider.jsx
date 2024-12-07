@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { LoginContext } from "./LoginContext";
 import { validateSignin, validateSignup } from "../../pages/Login/components/validateInput";
 import Swal from "sweetalert2";
-import signIn from "../../utilities/user/signIn";
-import signUp from "../../utilities/user/signUp";
+import signIn from "../../services/auth/signIn";
+import signUp from "../../services/auth/signUp";
 import useAppContext from "../App/useAppContext";
 
 /**

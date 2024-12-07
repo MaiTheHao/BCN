@@ -1,6 +1,6 @@
 import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState, useReducer, useCallback } from "react";
-import { db } from "../../../../configs/db";
+import { db } from "../../../../../backend/configs/database";
 import { faFileCsv, faFileImage, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toPng } from "html-to-image";
@@ -73,14 +73,14 @@ function Statistics() {
 			let result;
 			if (type === "new") {
 				result = await fetchUsers();
-				if (result.users.length !== 0) {
+				if (result && result.users.length !== 0) {
 					setUsers(result.users);
 					setLastDoc(result.lastDoc);
 					dispatch({ type: "SET_REAL_TOTAL_USER", payload: result.users.length });
 				}
 			} else if (type === "add") {
 				result = await fetchUsers(lastDoc);
-				if (result.users.length !== 0) {
+				if (result && result.users.length !== 0) {
 					setUsers((prev) => [...prev, ...result.users]);
 					setLastDoc(result.lastDoc);
 					dispatch({ type: "SET_REAL_TOTAL_USER", payload: result.users.length + users.length });
@@ -88,7 +88,7 @@ function Statistics() {
 			}
 
 			setIsLoadUser(false);
-			if (result.users.length === 0) return false;
+			if (result && result.users.length === 0) return false;
 			return true;
 		},
 		[users, fetchUsers]
@@ -204,7 +204,7 @@ function Statistics() {
 					</div>
 				</li>
 				<li>
-					<button onClick={() => loadUsers(fetchUsers, "new")}>Reload</button>
+					<button onClick={() => loadUsers("add")}>Reload</button>
 				</li>
 			</ul>
 			{!isLoadUser ? (
