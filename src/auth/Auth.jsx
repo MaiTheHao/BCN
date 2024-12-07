@@ -8,7 +8,7 @@ import Login from "../pages/Login/Login";
 
 const useAuthState = (handleSetAuth, setIsLoading) => {
 	useLayoutEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {			
+		const unsubscribe = onAuthStateChanged(auth, (user) => {	
 			setIsLoading(true);
 			if (user && user?.emailVerified) {
 				handleSetAuth(true, true, user);

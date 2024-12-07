@@ -4,11 +4,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Auth from "../auth/Auth";
 import BaseLayout from "../components/Layout/BaseLayout";
 import AppContextProvider from "../contexts/App/AppContextProvider";
-import { PrivateRoutes, PublicRoutes } from "./RouteStore";
+import { ErrorRoutes, PrivateRoutes, PublicRoutes } from "./RouteStore";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
-import Unauthorized from "../pages/Unauthorized/Unauthorized";
-import Undefined from "../pages/Undefined/Undefined";
 
 function AppRouter() {
 	return (
@@ -19,20 +17,21 @@ function AppRouter() {
 						<Route element={<BaseLayout />}>
 							<Route element={<PublicRoute />}>
 								{PublicRoutes.map((route, index) => (
-									<Route key={index} path={route.path} element={route.component} />
+									<Route key={`PublicRoutes-${index}`} path={route.path} element={route.component} />
 								))}
 							</Route>
 							<Route element={<PrivateRoute />}>
 								{PrivateRoutes.map((route, index) => (
-									<Route key={index} path={route.path} element={route.component} />
+									<Route key={`PrivateRoutes-${index}`} path={route.path} element={route.component} />
 								))}
 							</Route>
 						</Route>
 					</Route>
-					<Route path="/" element={<Navigate to="xuat-thong-tin" />} />
-					<Route path="/401" element={<Unauthorized/>} />
-					<Route path="/404" element={<Undefined/>} />
-					<Route path="*" element={<Undefined/>} />
+
+					{
+						/* Error routes */
+						ErrorRoutes.map((route, index) => (<Route key={`ErrorRoutes-${index}`} path={route.path} element={route.element}></Route>))
+					}
 				</Routes>
 			</AppContextProvider>
 		</BrowserRouter>

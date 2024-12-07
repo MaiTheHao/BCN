@@ -1,17 +1,15 @@
 import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-import './Unauthorized.scss'
-import { Link } from 'react-router-dom'
+import ErrorPage from '../ErrorPage.jsx/ErrorPage'
 
 function Unauthorized() {
   return (
-    <div className="unauthorized-container">
-      <FontAwesomeIcon icon={faExclamationTriangle} className="unauthorized-icon" />
-      <h1>Không có quyền truy cập</h1>
-      <p>Bạn không có quyền truy cập vào trang này.</p>
-      <Link to="/" className="link">Quay lại</Link>
-    </div>
+    <ErrorPage
+      title="Không có quyền truy cập"
+      description="Bạn không có quyền truy cập vào trang này."
+      comeBackToMessage="Quay lại"
+      comeBackTo="/"
+      color="#ff0000"
+    />
   )
 }
 
