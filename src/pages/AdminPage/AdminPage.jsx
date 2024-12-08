@@ -5,6 +5,7 @@ import { faHandPointer, faList, faPen } from "@fortawesome/free-solid-svg-icons"
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import Statistics from "./pages/Statistics/Statistics";
 import Draggable from "react-draggable";
+import EditUser from "./pages/EditUser.jsx/EditUser";
 
 const sidebarItems = [
 	{
@@ -17,6 +18,7 @@ const sidebarItems = [
 		title: "Chỉnh sửa người dùng",
 		icon: faPen,
 		href: "edit",
+		Comp: EditUser,
 	},
 ];
 

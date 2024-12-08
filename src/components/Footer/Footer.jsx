@@ -36,4 +36,4 @@ function Footer({ ...rest }) {
   );
 }
 
-export default Footer;
+export default React.memo(Footer);

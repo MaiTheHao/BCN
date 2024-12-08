@@ -34,7 +34,7 @@ function ExportInformation() {
 
 	return (
 		<div className="export-pic">
-			<h1>Thông tin của bạn</h1>
+			<h1>THÔNG TIN CÁ NHÂN</h1>
 			<ProfilePreview
 				ref={formRef}
 				name={name}

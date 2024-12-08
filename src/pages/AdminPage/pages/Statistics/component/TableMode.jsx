@@ -1,6 +1,6 @@
 import React from "react";
 
-function TableMode({filteredUsers}) {
+function TableMode({ filteredUsers, onEditUser }) {
 	return (
 		<table>
 			<thead>
@@ -13,7 +13,7 @@ function TableMode({filteredUsers}) {
 			</thead>
 			<tbody>
 				{filteredUsers.map((user, index) => (
-					<tr key={user.name + index}>
+					<tr key={user.name + index} onClick={() => onEditUser(user)} title={`Nhấn để chỉnh sửa ${user?.name}`}>
 						<td className="stt">{index + 1}</td>
 						<td>{user?.name}</td>
 						<td>{user?.chuyen_nganh?.toUpperCase()}</td>

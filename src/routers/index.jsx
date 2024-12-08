@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Auth from "../auth/Auth";
 import BaseLayout from "../components/Layout/BaseLayout";
@@ -16,21 +16,29 @@ function AppRouter() {
 					<Route element={<Auth />}>
 						<Route element={<BaseLayout />}>
 							<Route element={<PublicRoute />}>
-								{PublicRoutes.map((route, index) => (
-									<Route key={`PublicRoutes-${index}`} path={route.path} element={route.component} />
-								))}
+								{
+									/* Public routes */
+									PublicRoutes.map((route, index) => (
+										<Route key={`PublicRoutes-${index}`} path={route.path} element={route.component} />
+									))
+								}
 							</Route>
 							<Route element={<PrivateRoute />}>
-								{PrivateRoutes.map((route, index) => (
-									<Route key={`PrivateRoutes-${index}`} path={route.path} element={route.component} />
-								))}
+								{
+									/* Private routes */
+									PrivateRoutes.map((route, index) => (
+										<Route key={`PrivateRoutes-${index}`} path={route.path} element={route.component} />
+									))
+								}
 							</Route>
 						</Route>
 					</Route>
 
 					{
 						/* Error routes */
-						ErrorRoutes.map((route, index) => (<Route key={`ErrorRoutes-${index}`} path={route.path} element={route.element}></Route>))
+						ErrorRoutes.map((route, index) => (
+							<Route key={`ErrorRoutes-${index}`} path={route.path} element={route.element}></Route>
+						))
 					}
 				</Routes>
 			</AppContextProvider>

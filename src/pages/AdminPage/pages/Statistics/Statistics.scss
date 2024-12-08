@@ -14,13 +14,7 @@
 	}
 }
 
-.content-page.statistics {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 1em;
-	font-size: 1em;
-
+.content-page {
 	.statistics-search {
 		position: relative;
 		width: 100%;
@@ -219,6 +213,11 @@
 						&.stt{
 							text-align: center;
 						}
+					}
+
+					&:hover {
+						cursor: pointer;
+						background-color: #ffe6a5;
 					}
 				}
 			}

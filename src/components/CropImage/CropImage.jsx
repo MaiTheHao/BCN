@@ -108,4 +108,4 @@ function CropImage({ src, fixedWidth, setStorage, setVisible }) {
 	);
 }
 
-export default CropImage;
+export default React.memo(CropImage);

@@ -1,4 +1,4 @@
-import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
+import { collection, getDocs, limit, query, startAfter } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState, useReducer, useCallback } from "react";
 import { db } from "../../../../../backend/configs/database";
 import { faFileCsv, faFileImage, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,8 @@ import PagnigationOptions from "./component/PagnigationOptions";
 import TableMode from "./component/TableMode";
 import ImgMode from "./component/ImgMode";
 import "./Statistics.scss";
+import { useNavigate } from "react-router-dom";
+import useAdminPagesContext from "../../../../contexts/AdminPages/useAdminPagesContext";
 
 const pagnigationReducer = (state, action) => {
 	switch (action.type) {
@@ -33,6 +35,9 @@ const pagnigationReducer = (state, action) => {
 };
 
 function Statistics() {
+	const {handleSetCurrentUID} = useAdminPagesContext();
+
+	const navigator = useNavigate();
 	const [pagnigation, dispatch] = useReducer(pagnigationReducer, {
 		page: 1,
 		maxPerPage: 15,
@@ -61,8 +66,8 @@ function Statistics() {
 			} else {
 				querySnapshot = query(collection(db, "userInformation"), limit(pagnigation?.limitPerFetch));
 			}
-			const res = await getDocs(querySnapshot);
-			return { users: res.docs.map((doc) => ({ ...doc.data() })), lastDoc: res.docs[res.docs.length - 1] };
+			const res = await getDocs(querySnapshot);		
+			return { users: res.docs.map((doc) => ({ UID: doc.id, ...doc.data() })), lastDoc: res.docs[res.docs.length - 1] };
 		},
 		[pagnigation?.limitPerFetch]
 	);
@@ -155,6 +160,11 @@ function Statistics() {
 		return await loadUsers("add");
 	};
 
+	const navigateToEditUser = (user) => {
+		handleSetCurrentUID(user.UID);		
+		navigator(`/manage/edit`);
+	};
+
 	useEffect(() => {
 		return () => (profileRefs.current = []);
 	}, [users]);
@@ -210,7 +220,7 @@ function Statistics() {
 			{!isLoadUser ? (
 				<div className={`statistics-content ${showMode}`} ref={statisticsContentRef}>
 					{showMode === "text" ? (
-						<TableMode filteredUsers={filteredUsers} />
+						<TableMode filteredUsers={filteredUsers} onEditUser={navigateToEditUser} />
 					) : (
 						<ImgMode filteredUsers={filteredUsers} profileRefs={profileRefs} />
 					)}

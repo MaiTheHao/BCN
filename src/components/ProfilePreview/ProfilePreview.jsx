@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 import "./ProfilePreview.scss";
 
 const ProfilePreview = forwardRef(({ name, khoa, lop, className, chuyen_nganh, profilePic, onClickImg = null, width = "850px"}, ref) => {
@@ -44,4 +44,4 @@ const ProfilePreview = forwardRef(({ name, khoa, lop, className, chuyen_nganh, p
 	);
 });
 
-export default ProfilePreview;
+export default React.memo(ProfilePreview);

@@ -9,4 +9,4 @@ function InputField({ title, type = "text", id = "", name = "", placeholder = ""
 	);
 }
 
-export default InputField;
+export default React.memo(InputField);

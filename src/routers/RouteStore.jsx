@@ -5,6 +5,7 @@ import Undefined from "../pages/Undefined/Undefined";
 import Unauthorized from "../pages/Unauthorized/Unauthorized";
 import UpdateInformation from "../pages/UpdateInformation/UpdateInformation";
 import ExportInformation from "../pages/ExportInformation/ExportInformation";
+import AdminPagesContextProvider from "../contexts/AdminPages/AdminPagesContextProvider";
 
 const PublicRoutes = [
 	{
@@ -23,7 +24,7 @@ const PrivateRoutes = [
 	{
 		path: "manage/*",
 		name: "Manage",
-		component: <AdminPage />,
+		component: <AdminPagesContextProvider><AdminPage /></AdminPagesContextProvider>,
 	},
 ];
 
