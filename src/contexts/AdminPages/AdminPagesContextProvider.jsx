@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminPagesContext from "./AdminPagesContext";
+import { loadFromLocalStorage, saveToLocalStorage } from "../../utilities/localStorage/localStorageActions";
+
+const AdminPagesLocalStorage = {
+	name: "AdminPages-state--currentUID",
+}
 
 function AdminPagesContextProvider({ children }) {
-	const [currentUID, setCurrentUID] = useState(atob(localStorage.getItem("AdminPages-state--currentUID")) || "");
+	const [currentUID, setCurrentUID] = useState();
 
 	const handleSetCurrentUID = (UID) => {
-		localStorage.setItem("AdminPages-state--currentUID", btoa(UID));
+		saveToLocalStorage(AdminPagesLocalStorage.name, btoa(UID));
 		setCurrentUID(UID);
 	}
+
+	useEffect(() => {
+		const currentUID = loadFromLocalStorage(AdminPagesLocalStorage.name);
+		if(currentUID) {
+			setCurrentUID(atob(currentUID));
+		}
+	}, [])
 		
 	const value = { currentUID, handleSetCurrentUID };
 	return <AdminPagesContext.Provider value={value}>{children}</AdminPagesContext.Provider>;

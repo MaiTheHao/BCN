@@ -16,6 +16,7 @@ import CSV from "../../utilities/files/CSV";
 import data from "../../store/userDataSelection.json";
 import SHA265 from "../../utilities/crypto/SHA265";
 import "./EditUserForm.scss";
+import { loadFromLocalStorage, saveToLocalStorage } from "../../utilities/localStorage/localStorageActions";
 
 const initialState = {
 	chuyen_nganh: "",
@@ -51,7 +52,7 @@ function reducer(state, action) {
 	}
 }
 
-function EditUserForm({ UID, userData = null, onGetUserData = null, updateUserData, localStorageName = "EditUserForm-state--state", isJustOne = true}) {
+function EditUserForm({ UID, userData = null, updateUserData, localStorageName = "EditUserForm-state--state", isJustOne = true}) {
 	const { appContext } = useAppContext();
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [cropVisible, setCropVisible] = useState(false);
@@ -115,7 +116,7 @@ function EditUserForm({ UID, userData = null, onGetUserData = null, updateUserDa
 	};
 
 	const handleAsyncData = () => {
-		const { HashedUID, name, className, chuyen_nganh, profilePic, lop, khoa } = JSON.parse(localStorage.getItem(localStorageName)) || {};
+		const { HashedUID, name, className, chuyen_nganh, profilePic, lop, khoa } = loadFromLocalStorage(localStorageName) || {};
 		if (!(name || className || chuyen_nganh || profilePic || lop || khoa) || (!isJustOne && !SHA265.verifyData(UID, HashedUID))) {
 			dispatch({ type: "SET_NAME", payload: userData?.name || "" });
 			dispatch({ type: "SET_CLASS_NAME", payload: userData?.className || "" });
@@ -161,7 +162,7 @@ function EditUserForm({ UID, userData = null, onGetUserData = null, updateUserDa
 			setIsAsync(false);
 			const { profilePicUploaded, ...newState } = state;
 			if(!isJustOne) newState.HashedUID = SHA265.hashData(UID);
-			localStorage.setItem(localStorageName, JSON.stringify(newState));
+			saveToLocalStorage(localStorageName, newState);
 		}
 	}, [state, userData, isFectData]);
 
