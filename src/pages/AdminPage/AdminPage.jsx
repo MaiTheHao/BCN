@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import "./AdminPage.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandPointer, faList, faPen } from "@fortawesome/free-solid-svg-icons";
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { faAngleUp, faHandPointer, faList, faPen } from "@fortawesome/free-solid-svg-icons";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Statistics from "./pages/Statistics/Statistics";
 import Draggable from "react-draggable";
 import EditUser from "./pages/EditUser.jsx/EditUser";
+import PrivateRoute from "../../routers/PrivateRoute";
 
 const sidebarItems = [
 	{
@@ -27,28 +28,48 @@ function Tooltip({ text }) {
 }
 
 function AdminPage() {
+	const location = useLocation();
+	const currentPath = location.pathname;
+	const [sidebarMinimize, setSidebarMinimize] = useState(false);
+
 	return (
 		<div className="admin-page">
-			<Draggable axis="y" handle="#dragHandle">
-				<div className="sidebar">
+			<Draggable axis="both" handle="#dragHandle">
+				<div className={`sidebar ${sidebarMinimize ? "sidebar--minimize" : ""}`}>
 					<div className="sidebar-content">
+						<button className="sidebar-action-item tooltip-container" id="dragHandle">
+							<FontAwesomeIcon icon={faHandPointer} />
+						</button>
 						<ul>
-							<li id="dragHandle" style={{ cursor: "move" }}>
-								<FontAwesomeIcon icon={faHandPointer} />
-							</li>
 							{sidebarItems.map((item, index) => (
-								<Link key={index} to={item?.href}>
+								<Link
+									key={index}
+									to={`${item.href}`}
+									className={`tooltip-container ${currentPath.includes(item.href) ? "active" : ""}`}
+								>
 									<FontAwesomeIcon icon={item.icon} />
 									<Tooltip text={item.title} />
 								</Link>
 							))}
 						</ul>
+						<button
+							className="sidebar-action-item tooltip-container"
+							id="sidebar-resize"
+							onClick={() => setSidebarMinimize(!sidebarMinimize)}
+						>
+							<FontAwesomeIcon icon={faAngleUp} />
+							<Tooltip text={"Thu gọn"} />
+						</button>
 					</div>
 				</div>
 			</Draggable>
 			<div className="content">
 				<Routes>
-					{sidebarItems.map(({ href, Comp }, index) => Comp && <Route key={index} path={href} element={<Comp />} />)}
+					<Route element={<PrivateRoute />}>
+						{sidebarItems.map(
+							({ href, Comp }, index) => Comp && <Route key={index} path={`${href}`} element={<Comp />} />
+						)}
+					</Route>
 					<Route path="*" element={<Navigate to="statistics" />} />
 				</Routes>
 			</div>

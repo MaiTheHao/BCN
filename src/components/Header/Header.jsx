@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import webIcon from "../../assets/pics/webIcon.jpg";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import logout from "../../services/auth/logout";
@@ -12,36 +12,51 @@ const mountWith = {
 };
 
 const NavMenu = ({ userRole }) => {
-	const userMenuItems = useMemo(() => {
-		return PublicRoutes
-			.filter((page) => page.name)
-			.map((item, index) => (
-				<li key={index}>
-					<Link to={`/${item.path}`}>
-						{item.name}
-					</Link>
-				</li>
-			));
-	}, []);
+    const location = useLocation();
+    const currentPath = location.pathname;
 
-	const adminMenuItems = useMemo(() => {
-		return userRole === "admin"
-			? PrivateRoutes.map((item, index) => (
-					<li key={index}>
-						<Link to={`/${item.path}`}>
-							{item.name}
-						</Link>
-					</li>
-			  ))
-			: [];
-	}, [userRole]);
+    const handleLinkClick = (path) => {
+        localStorage.setItem("activeNavLink", path);
+    };
 
-	return (
-		<ul>
-			{userMenuItems}
-			{adminMenuItems}
-		</ul>
-	);
+    const userMenuItems = useMemo(() => {
+        return PublicRoutes
+            .filter((page) => page.name)
+            .map((item, index) => (
+                <li key={index}>
+                    <Link
+                        to={`/${item.path}`}
+                        className={currentPath === `/${item.path}` ? "active" : ""}
+                        onClick={() => handleLinkClick(`/${item.path}`)}
+                    >
+                        {item.name}
+                    </Link>
+                </li>
+            ));
+    }, [currentPath]);
+
+    const adminMenuItems = useMemo(() => {
+        return userRole === "admin"
+            ? PrivateRoutes.map((item, index) => (
+                    <li key={index}>
+                        <Link
+                            to={`/${item.path}`}
+                            className={currentPath === `/${item.path}` ? "active" : ""}
+                            onClick={() => handleLinkClick(`/${item.path}`)}
+                        >
+                            {item.name}
+                        </Link>
+                    </li>
+              ))
+            : [];
+    }, [currentPath, userRole]);
+
+    return (
+        <ul>
+            {userMenuItems}
+            {adminMenuItems}
+        </ul>
+    );
 };
 
 function Header({ ...rest }) {

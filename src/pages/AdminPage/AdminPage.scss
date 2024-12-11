@@ -1,5 +1,6 @@
 $sidebar-bg-color: #ffa200;
 $sidebar-hover-color: rgb(255, 201, 120);
+$sidebar-active-color: rgb(47, 47, 47);
 $tooltip-bg-color: #333;
 $tooltip-color: #fff;
 $transition-duration: 0.2s;
@@ -10,61 +11,124 @@ $transition-duration: 0.2s;
 	height: 100%;
 
 	.sidebar {
+		z-index: 1;
 		position: fixed;
 		height: 100%;
-		min-width: 2rem;
+		min-width: 1.5rem;
 		width: max-content;
-		z-index: 1;
+		font-size: 0.8em;
 
 		&-content {
 			display: flex;
-			justify-content: center;
+			flex-direction: column;
+			align-items: center;
+			gap: 0.5em;
 			background-color: $sidebar-bg-color;
-			border-radius: 0 0.5em 0.5em 0;
+			border-radius: 0.5em;
 			padding: 0.5em;
+			transition: gap .3s ease-in;
+
+			.sidebar-action-item {
+				text-align: center;
+				color: rgb(255, 230, 180);
+				background-color: transparent;
+
+				&:hover .tooltip {
+					opacity: 1;
+					display: block;
+				}
+			}
+
+			#dragHandle {
+				cursor: move;
+				margin-bottom: 0.25em;
+			}
+
+			#sidebar-resize {
+				margin-top: 0.25em;
+
+				&:hover {
+					cursor: pointer;
+				}
+
+				svg {
+					transition: transform $transition-duration ease-in-out;
+				}
+			}
 
 			ul {
+				max-height: 4em;
 				display: flex;
 				flex-direction: column;
-				gap: 0.5em;
+				gap: 0.25em;
+				padding: 0 0.2em;
+				transition: max-height $transition-duration ease-in-out;
 
 				a {
 					cursor: pointer;
 					width: 100%;
 					color: white;
-					font-size: 1.2em;
+					font-size: 1em;
 					transition: transform $transition-duration ease-in-out;
 
-					&:hover {
+					&.active {
+						transform: scale(1.1);
+						color: $sidebar-active-color;
+					}
+
+					&:not(.active):hover {
 						transform: scale(1.1);
 						color: $sidebar-hover-color;
 					}
 
 					&:active {
 						transform: scale(1.05);
-					}
-
-					.tooltip {
-						position: absolute;
-						display: none;
-						background-color: $tooltip-bg-color;
-						color: $tooltip-color;
-						padding: 0.4rem;
-						border-radius: 0.2rem;
-						font-size: 0.6em;
-						white-space: nowrap;
-						transform: translate(10%, 0);
-						opacity: 0;
-						transition: opacity $transition-duration;
-					}
-
-					&:hover .tooltip {
-						opacity: 1;
-						display: block;
+						color: $sidebar-active-color;
 					}
 				}
 			}
 		}
+
+		&.sidebar--minimize {
+			#sidebar-resize {
+				svg {
+					transform: rotate(180deg);
+				}
+			}
+
+			.sidebar-content {
+				gap: 0;
+
+				ul {
+					overflow: hidden;
+					max-height: 0;
+
+					a {
+						pointer-events: none;
+						transform: scale(0);
+					}
+				}
+			}
+		}
+	}
+
+	.tooltip {
+		position: absolute;
+		display: none;
+		background-color: $tooltip-bg-color;
+		color: $tooltip-color;
+		padding: 0.4rem;
+		border-radius: 0.2rem;
+		font-size: 0.6em;
+		white-space: nowrap;
+		transform: translate(10%, 0);
+		opacity: 0;
+		transition: opacity $transition-duration;
+	}
+
+	.tooltip-container:hover .tooltip {
+		opacity: 1;
+		display: block;
 	}
 
 	.content {
