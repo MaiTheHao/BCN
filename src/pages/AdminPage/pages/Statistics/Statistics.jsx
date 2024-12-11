@@ -100,23 +100,12 @@ function Statistics() {
 
 	const filteredUsers = useMemo(() => {
 		const raw_data = users.filter((user) => {
+			if (!searchTerm) return true;
+
 			const search = searchTerm.toLowerCase();
-			const fullClassName = `${user.className}${user.khoa}${user.lop}`.toLowerCase();
-			return (
-				search === ""
-				||
-				(
-					user.name.toLowerCase().includes(search)
-					||
-					user.khoa.toLowerCase().includes(search)
-					||
-					user.lop.toLowerCase().includes(search)
-					||
-					user.className.toLowerCase().includes(search)
-					||
-					fullClassName.includes(search)
-				)
-			)
+			const combinedFields = `${user.name || ""} ${user.khoa || ""} ${user.lop || ""} ${user.className || ""} ${user.className || ""}${user.khoa || ""}${user.lop || ""}`.toLowerCase();
+
+			return combinedFields.includes(search);
 		});
 		const res = raw_data.slice((pagnigation.page - 1) * pagnigation.maxPerPage, pagnigation.page * pagnigation.maxPerPage);
 		return res;
