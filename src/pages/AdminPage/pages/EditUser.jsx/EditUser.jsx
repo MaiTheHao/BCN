@@ -5,12 +5,12 @@ import EditUserForm from "../../../../components/EditUserForm/EditUserForm";
 import { Link } from "react-router-dom";
 import useAdminPagesContext from "../../../../contexts/AdminPages/useAdminPagesContext";
 
-const initValue = { UID: currentUID, userData: null }
+const initValue = { UID: null, userData: null }
 
 // Cần giải quyết vấn đề fetch khi cần thiết, vì có lưu trữ local storage
 function EditUser() {
 	const { currentUID } = useAdminPagesContext();
-	const [data, setData] = useState(initValue);
+	const [data, setData] = useState({...initValue, UID: currentUID});
 
 	useEffect(() => {
 		const fetchUserData = async () => {

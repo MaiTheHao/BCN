@@ -35,7 +35,7 @@ const pagnigationReducer = (state, action) => {
 };
 
 function Statistics() {
-	const {handleSetCurrentUID} = useAdminPagesContext();
+	const { handleSetCurrentUID } = useAdminPagesContext();
 
 	const navigator = useNavigate();
 	const [pagnigation, dispatch] = useReducer(pagnigationReducer, {
@@ -51,7 +51,6 @@ function Statistics() {
 	const [lastDoc, setLastDoc] = useState(null);
 
 	const [searchTerm, setSearchTerm] = useState("");
-	const [filter, setFilter] = useState("name");
 
 	const [showMode, setShowMode] = useState("text");
 
@@ -66,7 +65,7 @@ function Statistics() {
 			} else {
 				querySnapshot = query(collection(db, "userInformation"), limit(pagnigation?.limitPerFetch));
 			}
-			const res = await getDocs(querySnapshot);		
+			const res = await getDocs(querySnapshot);
 			return { users: res.docs.map((doc) => ({ UID: doc.id, ...doc.data() })), lastDoc: res.docs[res.docs.length - 1] };
 		},
 		[pagnigation?.limitPerFetch]
@@ -101,18 +100,27 @@ function Statistics() {
 
 	const filteredUsers = useMemo(() => {
 		const raw_data = users.filter((user) => {
-			if (filter === "className") {
-				return (
-					user.className?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					user.khoa?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					user.lop?.toLowerCase().includes(searchTerm.toLowerCase())
-				);
-			}
-			return user[filter]?.toLowerCase().includes(searchTerm.toLowerCase());
+			const search = searchTerm.toLowerCase();
+			const fullClassName = `${user.className}${user.khoa}${user.lop}`.toLowerCase();
+			return (
+				search === ""
+				||
+				(
+					user.name.toLowerCase().includes(search)
+					||
+					user.khoa.toLowerCase().includes(search)
+					||
+					user.lop.toLowerCase().includes(search)
+					||
+					user.className.toLowerCase().includes(search)
+					||
+					fullClassName.includes(search)
+				)
+			)
 		});
 		const res = raw_data.slice((pagnigation.page - 1) * pagnigation.maxPerPage, pagnigation.page * pagnigation.maxPerPage);
 		return res;
-	}, [users, filter, searchTerm, pagnigation.page]);
+	}, [users, searchTerm, pagnigation.page]);
 
 	const handleExportTableAsImage = async () => {
 		if (statisticsContentRef.current === null) return;
@@ -161,7 +169,7 @@ function Statistics() {
 	};
 
 	const navigateToEditUser = (user) => {
-		handleSetCurrentUID(user.UID);		
+		handleSetCurrentUID(user.UID);
 		navigator(`/manage/edit`);
 	};
 
@@ -180,19 +188,19 @@ function Statistics() {
 					<FontAwesomeIcon icon={faMagnifyingGlass} />
 					<input
 						type="text"
-						placeholder="Tìm kiếm người dùng..."
+						placeholder="Tìm kiếm sinh viên (tên, lớp, khoa)"
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
 				</div>
-				<div className="statistics-search__type statistics-search-part">
+				{/* <div className="statistics-search__type statistics-search-part">
 					<span>Mục tìm kiếm</span>
 					<select value={filter} onChange={(e) => setFilter(e.target.value)}>
 						<option value="name">Tên</option>
 						<option value="khoa">Chuyên ngành</option>
 						<option value="className">Lớp</option>
 					</select>
-				</div>
+				</div> */}
 			</div>
 			<ul className="statistics-actions">
 				<li>

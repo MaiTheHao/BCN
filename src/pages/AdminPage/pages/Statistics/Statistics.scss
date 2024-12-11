@@ -17,7 +17,7 @@
 .content-page {
 	.statistics-search {
 		position: relative;
-		width: 100%;
+		width: max-content;
 		height: max-content;
 		display: flex;
 		flex-direction: column;
@@ -28,14 +28,14 @@
 		&-part {
 			width: 25rem;
 			padding: 0.5em 1em;
-			border-radius: 0.25em;
+			border-radius: 5em;
 		}
 
 		&__input {
 			display: flex;
 			align-items: center;
 			gap: 1em;
-			background-color: rgb(245, 245, 245);
+			background-color: rgb(255, 255, 255);
 			border: 1px solid #b9b9b9;
 			padding: 0.5em 5%;
 
